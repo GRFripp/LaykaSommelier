@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "Review",
+    tableName = "Reviews",
     foreignKeys = [
         ForeignKey(
             entity = Drink::class,
