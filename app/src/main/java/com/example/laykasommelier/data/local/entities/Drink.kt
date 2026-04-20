@@ -10,7 +10,7 @@ import org.w3c.dom.Text
 )
 data class Drink(
     @PrimaryKey(autoGenerate = true)
-    val drinkId: Int,
+    val drinkID: Long = 0,
     @ColumnInfo(name = "drinkName")
     val drinkName: String,
     @ColumnInfo(name = "drinkType")

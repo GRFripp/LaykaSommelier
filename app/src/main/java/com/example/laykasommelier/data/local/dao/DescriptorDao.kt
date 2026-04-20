@@ -9,7 +9,7 @@ import com.example.laykasommelier.data.local.entities.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DesriptorDao {
+interface DescriptorDao {
    /* @Query("""
       SELECT descriptorName, descriptorCategoryName
        FROM Descriptors

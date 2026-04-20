@@ -10,7 +10,7 @@ import org.w3c.dom.Text
 )
 data class Source(
     @PrimaryKey(autoGenerate = true)
-    val sourceID: String,
+    val sourceID: Long = 0,
     @ColumnInfo(name = "sourceName")
     val sourceName: String,
     @ColumnInfo(name = "sourceUrl")

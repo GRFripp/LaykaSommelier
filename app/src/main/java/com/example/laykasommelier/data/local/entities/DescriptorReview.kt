@@ -22,6 +22,6 @@ import androidx.room.ForeignKey
     ]
 )
 data class DescriptorReview(
-    val descriptorID : Int,
-    val reviewID:Int
+    val descriptorID : Long = 0,
+    val reviewID:Long = 0
 )

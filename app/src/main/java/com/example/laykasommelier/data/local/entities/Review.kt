@@ -24,11 +24,11 @@ import androidx.room.PrimaryKey
 )
 data class Review(
     @PrimaryKey(autoGenerate = true)
-    val reviewID : Int,
+    val reviewID : Long = 0,
     @ColumnInfo("reviewedDrinkID")
-    val reviewedDrinkID : Int,
+    val reviewedDrinkID : Long = 0,
     @ColumnInfo("reviewSourceID")
-    val reviewSourceID: Int,
+    val reviewSourceID: Long = 0,
     @ColumnInfo("reviewUrl")
     val reviewUrl: String?
 )

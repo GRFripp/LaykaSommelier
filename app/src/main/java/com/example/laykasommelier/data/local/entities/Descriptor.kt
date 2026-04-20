@@ -19,9 +19,9 @@ import androidx.room.util.TableInfo
 )
 data class Descriptor(
     @PrimaryKey(autoGenerate = true)
-    val descriptorID: Int,
+    val descriptorID: Long = 0,
     @ColumnInfo ("descriptorName")
     val descriptorName: String,
     @ColumnInfo("descriptorCategory")
-    val descriptorCategory: Int
+    val descriptorCategory: Long
 )

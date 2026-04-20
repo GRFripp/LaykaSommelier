@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 )
 data class DescriptorCategory(
     @PrimaryKey(autoGenerate = true)
-    val descriptorCategoryID : Int,
+    val descriptorCategoryID : Long = 0,
     @ColumnInfo("descriptorCategoryName")
     val descriptorCategoryName: String,
     @ColumnInfo("descriptorCategoryColor")
