@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.laykasommelier.data.local.entities.Descriptor
 import com.example.laykasommelier.data.local.entities.DescriptorReview
 import kotlinx.coroutines.flow.Flow
 

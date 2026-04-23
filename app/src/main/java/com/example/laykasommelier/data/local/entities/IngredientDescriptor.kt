@@ -1,5 +1,6 @@
 package com.example.laykasommelier.data.local.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 
@@ -22,6 +23,8 @@ import androidx.room.ForeignKey
     ]
 )
 data class IngredientDescriptor(
+    @ColumnInfo("ingredientID")
     val ingredientID : Long = 0,
+    @ColumnInfo("descriptorID")
     val descriptorID : Long = 0
 )

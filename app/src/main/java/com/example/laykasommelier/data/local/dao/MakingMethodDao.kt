@@ -5,15 +5,15 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.laykasommelier.data.local.entities.Review
+import com.example.laykasommelier.data.local.entities.MakingMethod
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ReviewDao {
-    @Query("Select * from Reviews")
-    fun getAllReviews(): Flow<List<Review>>
+interface MakingMethodDao {
+    @Query("Select * from MakingMethods")
+    fun getAllDrinks(): Flow<List<MakingMethod>>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReview(review: Review): Long
+    suspend fun insertDrink(makingMethod: MakingMethod): Long
     @Delete
-    suspend fun deleteReview(review: Review)
+    suspend fun deleteDrink(makingMethod: MakingMethod)
 }
