@@ -8,17 +8,40 @@ import com.example.laykasommelier.data.local.dao.*
 import com.example.laykasommelier.data.local.entities.*
 
 @Database(
-    entities = [Drink::class, Descriptor::class, DescriptorCategory::class, DescriptorReview::class, Review::class, Source::class],
-    version = 2,
+    entities = [
+        Cocktail::class,
+        CocktailIngredient::class,
+        Drink::class,
+        Descriptor::class,
+        DescriptorCategory::class,
+        DescriptorReview::class,
+        Employee::class,
+        Ingredient::class,
+        IngredientDescriptor::class,
+        MakingMethod::class,
+        Review::class,
+        Source::class,
+        Suggestion::class
+               ],
+    version = 3,
     exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {
+
+    abstract fun cocktailDao(): CocktailDao
+    abstract fun cocktailIngredientDao(): CocktailIngredientDao
+    abstract fun descriptorCategoryDao(): DescriptorCategoryDao
+    abstract fun descriptorDao(): DescriptorDao
+
+    abstract fun descriptorReviewDao(): DescriptorReviewDao
     abstract fun drinkDao(): DrinkDao
+    abstract fun employeeDao(): EmployeeDao
+    abstract fun ingredientDao(): IngredientDao
+    abstract fun ingredientDescriptorDao(): IngredientDescriptorDao
+    abstract fun makingMethodDao(): MakingMethodDao
     abstract fun reviewDao(): ReviewDao
     abstract  fun sourceDao(): SourceDao
-    abstract fun descriptorCategoryDao(): DescriptorCategoryDao
-    abstract fun descriptorReviewDao(): DescriptorReviewDao
-    abstract fun descriptorDao(): DescriptorDao
+    abstract fun suggestionDao(): SuggestionDao
 
     companion object{
         @Volatile
