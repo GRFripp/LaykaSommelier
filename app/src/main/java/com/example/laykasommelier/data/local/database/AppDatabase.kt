@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.laykasommelier.data.local.dao.*
 import com.example.laykasommelier.data.local.entities.*
 
@@ -23,7 +24,7 @@ import com.example.laykasommelier.data.local.entities.*
         Source::class,
         Suggestion::class
                ],
-    version = 3,
+    version = 6,
     exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {
@@ -54,7 +55,7 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     "layka_database"
                 )
-                    .fallbackToDestructiveMigration()  // ТОЛЬКО ДЛЯ РАЗРАБОТКИ
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance
