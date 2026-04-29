@@ -12,10 +12,12 @@ import com.example.laykasommelier.data.local.database.AppDatabase
 import com.example.laykasommelier.data.local.entities.Drink
 import com.example.laykasommelier.data.local.entities.Review
 import com.example.laykasommelier.data.local.entities.Source
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,15 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.laykasommelier.data.local.database.AppDatabase
 import com.example.laykasommelier.data.local.repositories.DrinkRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class DrinkFragment: Fragment() {
 
-    private val viewModel: DrinkListViewModel by viewModels{
-        val db = AppDatabase.getInstance(requireContext())
-        val repository = DrinkRepository(db.drinkDao())
-        DrinkListViewModelFactory(repository)
-    }
+    private val viewModel: DrinkListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
