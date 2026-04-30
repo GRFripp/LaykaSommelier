@@ -33,13 +33,11 @@ class DrinkFragment: Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.drinkTypeListRV)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val adapter = DrinkTypeAdapter(emptyList()) { clickedType ->
-            // Заглушка: ничего не делаем
-        }
+        val adapter = DrinkTypeAdapter{clickedType -> /*FEFe*/}
         recyclerView.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.drinkListTypes.collect {
-                list -> adapter.updateItems(list)
+                list -> adapter.submitList(list)
             }
         }
     }
