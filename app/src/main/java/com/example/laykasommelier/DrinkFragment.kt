@@ -18,27 +18,11 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class DrinkFragment: Fragment() {
 
-    private val viewModel: DrinkListViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_drink, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val recyclerView: RecyclerView = view.findViewById(R.id.drinkTypeListRV)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        val adapter = DrinkTypeAdapter{clickedType -> /*FEFe*/}
-        recyclerView.adapter = adapter
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.drinkListTypes.collect {
-                list -> adapter.submitList(list)
-            }
-        }
     }
 }

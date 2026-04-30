@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_drink"
+    app:startDestination="@id/drinkCategoriesFragment">
+
+
+    <fragment
+        android:id="@+id/drinkListTypeSelectedFragment"
+        android:name="com.example.laykasommelier.DrinkListTypeSelectedFragment"
+        android:label="DrinkListTypeSelectedFragment">
+        <argument
+            android:name="selectedType"
+            app:argType="string">
+        </argument>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/drinkCategoriesFragment"
+        android:name="com.example.laykasommelier.DrinkCategoriesFragment"
+        android:label="DrinkCategoriesFragment" >
+        <action
+            android:id="@+id/action_drinkCategoriesFragment_to_drinkListTypeSelectedFragment"
+            app:destination="@id/drinkListTypeSelectedFragment" />
+    </fragment>
+</navigation>
