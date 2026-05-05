@@ -24,5 +24,7 @@ data class Drink(
     @ColumnInfo(name = "drinkAged")
     val drinkAged: Int = 0,
     @ColumnInfo(name ="drinkAbv")
-    val drinkAbv: Double = 0.00
+    val drinkAbv: Double = 0.00,
+    @ColumnInfo(name="drinkImageUrl")
+    val drinkImageUrl: String
     )

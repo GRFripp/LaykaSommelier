@@ -4,17 +4,20 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
+import com.example.laykasommelier.data.local.pojo.DrinkListTypes
 import com.example.laykasommelier.data.local.repositories.DrinkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class DrinkListViewModel @Inject constructor(private val repository: DrinkRepository, savedStateHandle: SavedStateHandle): ViewModel() {
-    private val drinkType: String = savedStateHandle["selectedType"]!!
+class DrinkListTypeViewModel @Inject constructor(private val repository: DrinkRepository): ViewModel() {
 
-    val drinkPreview: StateFlow<List<DrinkListPreviews>> = repository.drinkListPreviews(drinkType)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val drinkListTypes : Flow<List<DrinkListTypes>> = repository.drinkListTypes()
+
+
 }

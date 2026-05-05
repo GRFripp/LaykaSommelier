@@ -18,7 +18,7 @@ import kotlin.getValue
 @AndroidEntryPoint
 class DrinkCategoriesFragment: Fragment() {
 
-    private val viewModel: DrinkListViewModel by viewModels()
+    private val viewModel: DrinkListTypeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

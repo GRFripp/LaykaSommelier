@@ -24,7 +24,7 @@ import com.example.laykasommelier.data.local.entities.*
         Source::class,
         Suggestion::class
                ],
-    version = 8,
+    version = 10,
     exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {
@@ -55,7 +55,7 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     "layka_database"
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(false)
                     .build()
                 INSTANCE = instance
                 instance

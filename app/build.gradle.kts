@@ -85,4 +85,6 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+
 }
