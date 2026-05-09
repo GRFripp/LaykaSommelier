@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.laykasommelier.data.local.entities.Ingredient
+import com.example.laykasommelier.data.local.pojo.AdminListItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,4 +17,11 @@ interface IngredientDao {
     suspend fun insertDrink(ingredient: Ingredient): Long
     @Delete
     suspend fun deleteDrink(ingredient: Ingredient)
+
+    @Query("""
+        Select ingredientID as id,ingredientName as name, ingredientAbv as abv
+        From
+        Ingredients
+    """)
+    fun getALIngredients(): Flow<List<AdminListItem.ALIngredient>>
 }

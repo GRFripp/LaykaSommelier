@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.laykasommelier.data.local.entities.*
+import com.example.laykasommelier.data.local.pojo.AdminListItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,4 +17,9 @@ interface DescriptorCategoryDao {
     suspend fun insertDescriptorCategory(descriptorCategory: DescriptorCategory): Long
     @Delete
     suspend fun deleteDescriptorCategory(descriptorCategory: DescriptorCategory)
+    @Query("""
+        Select descriptorCategoryID as id, descriptorCategoryName as name, descriptorCategoryColor as color
+        From DescriptorCategories
+    """)
+    fun getALDescriptorCategories(): Flow<List<AdminListItem.ALDescriptorCategory>>
 }

@@ -3,6 +3,7 @@ package com.example.laykasommelier.data.local.di
 import android.content.Context
 import com.example.laykasommelier.data.local.dao.*
 import com.example.laykasommelier.data.local.database.AppDatabase
+import com.example.laykasommelier.data.local.repositories.AdminRepository
 import com.example.laykasommelier.data.local.repositories.DrinkRepository
 import dagger.Module
 import dagger.Provides
@@ -50,4 +51,10 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideDrinkRepository(drinkDao: DrinkDao): DrinkRepository= DrinkRepository(drinkDao)
+
+    @Provides
+    @Singleton
+    fun provideAdminRepo(employeeDao: EmployeeDao,descriptorDao: DescriptorDao,descriptorCategoryDao: DescriptorCategoryDao,makingMethodDao: MakingMethodDao,ingredientDao: IngredientDao):
+            AdminRepository=
+        AdminRepository(employeeDao,descriptorDao,descriptorCategoryDao,makingMethodDao,ingredientDao)
 }
