@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,8 @@ class DrinkListTypeSelectedFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = DrinkListSelectedAdapter { drinkId ->
-            //заглушка
+            val action = DrinkListTypeSelectedFragmentDirections.actionDrinkListTypeSelectedFragmentToDrinkDetailFragment(drinkId)
+            findNavController().navigate(action)
         }
         val rv : RecyclerView = view.findViewById<RecyclerView>(R.id.drinkListRV)
         rv.adapter = adapter

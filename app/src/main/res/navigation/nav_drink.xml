@@ -5,15 +5,7 @@
     app:startDestination="@id/drinkCategoriesFragment">
 
 
-    <fragment
-        android:id="@+id/drinkListTypeSelectedFragment"
-        android:name="com.example.laykasommelier.DrinkListTypeSelectedFragment"
-        android:label="DrinkListTypeSelectedFragment">
-        <argument
-            android:name="selectedType"
-            app:argType="string">
-        </argument>
-    </fragment>
+
 
 
     <fragment
@@ -23,5 +15,25 @@
         <action
             android:id="@+id/action_drinkCategoriesFragment_to_drinkListTypeSelectedFragment"
             app:destination="@id/drinkListTypeSelectedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/drinkListTypeSelectedFragment"
+        android:name="com.example.laykasommelier.DrinkListTypeSelectedFragment"
+        android:label="DrinkListTypeSelectedFragment">
+        <argument
+            android:name="selectedType"
+            app:argType="string">
+        </argument>
+        <action
+            android:id="@+id/action_drinkListTypeSelectedFragment_to_drinkDetailFragment"
+            app:destination="@id/drinkDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/drinkDetailFragment"
+        android:name="com.example.laykasommelier.DrinkDetailFragment"
+        android:label="DrinkDetailFragment" >
+        <argument
+            android:name="drinkDetailID"
+            app:argType="long"/>
     </fragment>
 </navigation>

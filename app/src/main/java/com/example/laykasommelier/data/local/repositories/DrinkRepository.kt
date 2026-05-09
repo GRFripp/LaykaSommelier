@@ -3,7 +3,9 @@ package com.example.laykasommelier.data.local.repositories
 import com.example.laykasommelier.data.local.pojo.DrinkListTypes
 import kotlinx.coroutines.flow.Flow
 import com.example.laykasommelier.data.local.dao.DrinkDao
+import com.example.laykasommelier.data.local.entities.Drink
 import com.example.laykasommelier.data.local.pojo.CategoryColor
+import com.example.laykasommelier.data.local.pojo.DrinkDetail
 import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
 import kotlinx.coroutines.flow.map
 
@@ -26,4 +28,5 @@ class DrinkRepository(private val  drinkDao: DrinkDao) {
                 }
         }
     }
+    fun getDrinkById(drinkId: Long): Flow<DrinkDetail> = drinkDao.getDrinkById(drinkId)
 }

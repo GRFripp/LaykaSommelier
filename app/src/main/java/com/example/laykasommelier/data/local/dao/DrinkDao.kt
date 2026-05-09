@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 import com.example.laykasommelier.data.local.entities.Drink
+import com.example.laykasommelier.data.local.pojo.DrinkDetail
 import com.example.laykasommelier.data.local.pojo.DrinkListRow
 import com.example.laykasommelier.data.local.pojo.DrinkListTypes
 import kotlinx.coroutines.flow.Flow
@@ -43,4 +44,11 @@ interface DrinkDao {
         order by d.drinkName
     """)
     fun getDrinkListRow(drinkType: String): Flow<List<DrinkListRow>>
+
+    @Query("""
+        Select drinkName as name,drinkType as type,drinkSubType as subType,drinkCountry as country,drinkProducer as producer,drinkAged as aged,drinkAbv as abv
+        from Drinks
+        Where Drinks.drinkID = :drinkId
+    """)
+    fun getDrinkById(drinkId: Long): Flow<DrinkDetail>
 }
