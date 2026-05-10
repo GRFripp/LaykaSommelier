@@ -5,7 +5,11 @@ import com.example.laykasommelier.data.local.dao.*
 import com.example.laykasommelier.data.local.database.AppDatabase
 import com.example.laykasommelier.data.local.repositories.AdminRepository
 import com.example.laykasommelier.data.local.repositories.CocktailRepository
+import com.example.laykasommelier.data.local.repositories.DescriptorCategoryRepository
+import com.example.laykasommelier.data.local.repositories.DescriptorRepository
 import com.example.laykasommelier.data.local.repositories.DrinkRepository
+import com.example.laykasommelier.data.local.repositories.EmployeeRepository
+import com.example.laykasommelier.data.local.repositories.IngredientRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,4 +66,24 @@ class DatabaseModule {
     @Singleton
     fun provideCocktailRepo(cocktailDao: CocktailDao): CocktailRepository =
         CocktailRepository(cocktailDao)
+
+    @Provides
+    @Singleton
+    fun provideEmployeeRepo(employeeDao: EmployeeDao): EmployeeRepository =
+        EmployeeRepository(employeeDao)
+
+    @Provides
+    @Singleton
+    fun provideIngredientRepo(ingredientDao: IngredientDao, ingredientDescriptorDao: IngredientDescriptorDao): IngredientRepository=
+        IngredientRepository(ingredientDao, ingredientDescriptorDao)
+
+    @Provides
+    @Singleton
+    fun provideDescriptorRepo(descriptorDao: DescriptorDao): DescriptorRepository=
+        DescriptorRepository(descriptorDao)
+    @Provides
+    @Singleton
+    fun provideDescriptorCategoryRepo(descriptorCategoryDao: DescriptorCategoryDao): DescriptorCategoryRepository=
+        DescriptorCategoryRepository(descriptorCategoryDao)
+
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_admin"
+    app:startDestination="@id/adminListFragment">
+
+
+    <fragment
+        android:id="@+id/adminListFragment"
+        android:name="com.example.laykasommelier.AdminListFragment"
+        android:label="AdminListFragment" >
+        <action
+            android:id="@+id/action_adminListFragment2_to_employeeEditDialog"
+            app:destination="@id/employeeEditDialog" />
+        <action
+            android:id="@+id/action_adminListFragment_to_ingredientEditDialog"
+            app:destination="@id/ingredientEditDialog" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/employeeEditDialog"
+        android:name="com.example.laykasommelier.EmployeeEditDialog">
+        <argument
+            android:name="employeeId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </dialog>
+    <dialog
+        android:id="@+id/ingredientEditDialog"
+        android:name="com.example.laykasommelier.IngredientEditFragment">
+        <argument android:name="ingredientId" app:argType="long" android:defaultValue="-1L"/>
+    </dialog>
+</navigation>

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DescriptorCategoryDao {
     @Query("Select * from DescriptorCategories")
-    fun getAllDescriptorCategories(): Flow<List<DescriptorCategory>>
+    suspend fun getAllDescriptorCategories(): List<DescriptorCategory>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDescriptorCategory(descriptorCategory: DescriptorCategory): Long
     @Delete

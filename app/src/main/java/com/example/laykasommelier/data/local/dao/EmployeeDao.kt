@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.laykasommelier.data.local.entities.Employee
 import com.example.laykasommelier.data.local.pojo.AdminListItem
 import kotlinx.coroutines.flow.Flow
@@ -12,8 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface EmployeeDao {
     @Query("Select * from Employees")
     fun getAllDrinks(): Flow<List<Employee>>
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDrink(employee: Employee): Long
+
     @Delete
     suspend fun deleteDrink(employee: Employee)
 
@@ -22,4 +22,13 @@ interface EmployeeDao {
         From Employees
     """)
     fun getALEmployees(): Flow<List<AdminListItem.ALEmployee>>
+
+    @Query("SELECT * FROM Employees WHERE employeeID = :id")
+    suspend fun getById(id: Long): Employee?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(employee: Employee): Long
+
+    @Update
+    suspend fun update(employee: Employee)
 }

@@ -18,67 +18,12 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AdminFragment: Fragment() {
 
-    private val viewModel: AdminViewModel by viewModels()
-
-
-    private val allTypes: List<AdminEntityType> = AdminEntityType.values().toList()
-    private val entityLabels: List<String> = allTypes.map { it.label }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_admin, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val btnNext = view.findViewById<ImageButton>(R.id.btnNext)
-        val btnPrev = view.findViewById<ImageButton>(R.id.btnPrev)
-        val tvCurrent = view.findViewById<TextView>(R.id.tvCurrent)
-        val tvNext = view.findViewById<TextView>(R.id.tvNext)
-        val tvPrev = view.findViewById<TextView>(R.id.tvPrev)
-
-        val adapter = AdminRVAdapter{ item ->
-            //fefefe
-        }
-        val rv : RecyclerView = view.findViewById(R.id.adminRV)
-        rv.layoutManager= LinearLayoutManager(requireContext())
-        rv.adapter=adapter
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.currentType.collect { type ->
-                val index = AdminEntityType.values().indexOf(type)
-                updateCarousel(index,tvCurrent,tvNext,tvPrev)
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.items.collect { list ->
-                adapter.submitList(list)
-            }
-        }
-        btnPrev.setOnClickListener { shiftType(-1) }
-        btnNext.setOnClickListener { shiftType(1) }
-    }
-    private fun updateCarousel(currentIndex: Int, tvCurrent:TextView,tvNext:TextView,tvPrev: TextView){
-        if (allTypes.isEmpty()) return
-        val prevIndex = if (currentIndex == 0) allTypes.size - 1 else currentIndex - 1
-        val nextIndex = (currentIndex + 1) % allTypes.size
-
-        tvCurrent.text = entityLabels[currentIndex]
-        tvPrev.text = entityLabels[prevIndex]
-        tvNext.text = entityLabels[nextIndex]
-
-        tvCurrent.alpha = 1f
-        tvPrev.alpha = 0.4f
-        tvNext.alpha = 0.4f
-    }
-    private fun shiftType(step: Int) {
-        if (allTypes.isEmpty()) return
-        val currentIndex = allTypes.indexOf(viewModel.currentType.value)
-        val newIndex = ((currentIndex + step) % allTypes.size + allTypes.size) % allTypes.size
-        viewModel.onEntityTypeChanged(allTypes[newIndex])
+        return inflater.inflate(R.layout.fragment_admin,container,false)
     }
 
 }

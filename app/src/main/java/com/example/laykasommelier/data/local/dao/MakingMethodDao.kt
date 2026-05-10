@@ -23,4 +23,11 @@ interface MakingMethodDao {
         from MakingMethods
     """)
     fun getALMakingMethods(): Flow<List<AdminListItem.ALMakingMethod>>
+
+    @Query("""
+        Select makingMethodID as id, makingMethodName as name, makingMethodDilution as dilution
+        from MakingMethods
+        where id = :id
+    """)
+    fun getMakingMethodById(id: Long): Flow<AdminListItem.ALMakingMethod>
 }

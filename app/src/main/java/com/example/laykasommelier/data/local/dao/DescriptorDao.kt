@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.laykasommelier.data.local.entities.*
 import com.example.laykasommelier.data.local.pojo.AdminListItem
+import com.example.laykasommelier.data.local.pojo.DescriptorWithCategory
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -30,4 +31,25 @@ interface DescriptorDao {
         Descriptors as d inner join DescriptorCategories as dc on d.descriptorCategory = dc.descriptorCategoryID;
     """)
     fun getALDescriptors(): Flow<List<AdminListItem.ALDescriptor>>
+
+    @Query("""
+        Select descriptorID as id, descriptorName as name, descriptorCategoryName as category
+        from
+        Descriptors as d inner join DescriptorCategories as dc on d.descriptorCategory = dc.descriptorCategoryID
+        where id = :id;
+    """)
+    fun getDescriptorById(id: Long):Flow<AdminListItem.ALDescriptor>
+
+    @Query("""
+    SELECT 
+        d.descriptorID AS descriptorId,
+        d.descriptorName AS descriptorName,
+        c.descriptorCategoryID AS categoryId,
+        c.descriptorCategoryName AS categoryName,
+        c.descriptorCategoryColor AS categoryColor
+    FROM Descriptors d
+    INNER JOIN DescriptorCategories c ON d.descriptorCategory = c.descriptorCategoryID
+    ORDER BY c.descriptorCategoryName, d.descriptorName
+""")
+    fun getAllDescriptorsWithCategoryFlow(): Flow<List<DescriptorWithCategory>>
 }

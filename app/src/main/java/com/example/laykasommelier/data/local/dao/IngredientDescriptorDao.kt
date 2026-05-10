@@ -10,10 +10,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IngredientDescriptorDao {
-    @Query("Select * from IngredientsDescriptors")
-    fun getAllDrinks(): Flow<List<IngredientDescriptor>>
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDrink(ingredientDescriptor: IngredientDescriptor): Long
-    @Delete
-    suspend fun deleteDrink(ingredientDescriptor: IngredientDescriptor)
+
+    @Query("SELECT descriptorId FROM IngredientsDescriptors WHERE ingredientID = :ingredientId")
+    suspend fun getDescriptorIdsByIngredientId(ingredientId: Long): List<Long>
+
+
+    @Query("DELETE FROM IngredientsDescriptors WHERE ingredientId = :ingredientId")
+    suspend fun deleteAllDescriptorsByIngredientId(ingredientId: Long)
+
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertDescriptorLink(link: IngredientDescriptor)
 }
