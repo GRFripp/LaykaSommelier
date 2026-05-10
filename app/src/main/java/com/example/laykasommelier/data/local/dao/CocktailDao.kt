@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.laykasommelier.data.local.entities.Cocktail
+import com.example.laykasommelier.data.local.pojo.CocktailListRow
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,4 +17,18 @@ interface CocktailDao {
     suspend fun insertDrink(cocktail: Cocktail): Long
     @Delete
     suspend fun deleteDrink(cocktail: Cocktail)
+
+    @Query("""
+        Select c.cocktailID as cId, c.cocktailName as cName, d.descriptorName as dName, dc.descriptorCategoryColor as dColor
+        From 
+        Cocktails as c left join CocktailsIngredients as ci on c.cocktailID = ci.cocktailID
+        left join Ingredients as i on ci.ingredientID = i.ingredientID
+        left join IngredientsDescriptors as id on i.ingredientID = id.ingredientID
+        left join descriptors as d on id.ingredientID = d.descriptorID
+        left join DescriptorCategories as dc on d.descriptorCategory = dc.descriptorCategoryID
+        group by c.cocktailID, dc.descriptorCategoryColor
+        order by c.cocktailName
+    """)
+     fun getCocktailListRows(): Flow<List<CocktailListRow>>
+
 }

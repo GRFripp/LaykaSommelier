@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_cocktail"
+    app:startDestination="@id/cocktailListFragment">
+    <fragment
+        android:id="@+id/cocktailListFragment"
+        android:name="com.example.laykasommelier.CocktailListFragment"
+        android:label="CocktailListFragment" >
+        <action
+            android:id="@+id/action_cocktailListFragment_to_cocktailDetailFragment2"
+            app:destination="@id/cocktailDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cocktailDetailFragment"
+        android:name="com.example.laykasommelier.CocktailDetailFragment"
+        android:label="CocktailDetailFragment">
+        <argument
+            android:name="cocktailDetailId"
+            app:argType="long">
+        </argument>
+    </fragment>
+
+</navigation>
