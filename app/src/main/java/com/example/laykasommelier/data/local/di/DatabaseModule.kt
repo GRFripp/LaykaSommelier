@@ -10,6 +10,7 @@ import com.example.laykasommelier.data.local.repositories.DescriptorRepository
 import com.example.laykasommelier.data.local.repositories.DrinkRepository
 import com.example.laykasommelier.data.local.repositories.EmployeeRepository
 import com.example.laykasommelier.data.local.repositories.IngredientRepository
+import com.example.laykasommelier.data.local.repositories.MakingMethodRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -85,5 +86,10 @@ class DatabaseModule {
     @Singleton
     fun provideDescriptorCategoryRepo(descriptorCategoryDao: DescriptorCategoryDao): DescriptorCategoryRepository=
         DescriptorCategoryRepository(descriptorCategoryDao)
+
+    @Provides
+    @Singleton
+    fun provideMethodRepo(makingMethodDao: MakingMethodDao): MakingMethodRepository=
+        MakingMethodRepository(makingMethodDao)
 
 }

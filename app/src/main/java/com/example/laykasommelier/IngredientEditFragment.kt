@@ -15,7 +15,7 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+import com.example.laykasommelier.data.local.pojo.IngredientEditState
 @AndroidEntryPoint
 class IngredientEditFragment: DialogFragment() {
     private val viewModel: IngredientEditViewModel by viewModels()
@@ -38,9 +38,26 @@ class IngredientEditFragment: DialogFragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collect { state ->
-                if (etName.text.toString() != state.name) etName.setText(state.name)
-                if (etAcidity.text.toString() != state.acidity) etAcidity.setText(state.acidity)
-                if (etSugar.text.toString() != state.sugarLevel) etSugar.setText(state.sugarLevel)
+                // Название (текстовое поле)
+                if (etName.text.toString() != state.name) {
+                    val pos = etName.selectionStart
+                    etName.setText(state.name)
+                    etName.setSelection(minOf(pos, state.name.length))
+                }
+                // Кислотность (числовое поле)
+                if (etAcidity.text.toString() != state.acidity) {
+                    val pos = etAcidity.selectionStart
+                    etAcidity.setText(state.acidity)
+                    etAcidity.setSelection(minOf(pos, state.acidity.length))
+                }
+                // Сладость (числовое поле)
+                if (etSugar.text.toString() != state.sugarLevel) {
+                    val pos = etSugar.selectionStart
+                    etSugar.setText(state.sugarLevel)
+                    etSugar.setSelection(minOf(pos, state.sugarLevel.length))
+                }
+                // Поисковая строка etSearch намеренно не обновляется – она только передаёт ввод во ViewModel,
+                // а обратная установка привела бы к конфликту.
             }
         }
         // --- Слушатели ввода ---

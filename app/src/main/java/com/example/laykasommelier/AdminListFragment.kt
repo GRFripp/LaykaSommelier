@@ -49,13 +49,22 @@ class AdminListFragment: Fragment() {
                     val action = AdminListFragmentDirections.actionAdminListFragment2ToEmployeeEditDialog(item.id)
                     findNavController().navigate(action)
                 }
-                is AdminListItem.ALMakingMethod -> {}
+                is AdminListItem.ALMakingMethod -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragmentToMakingMethodEditDialog(item.id)
+                    findNavController().navigate(action)
+                }
                 is AdminListItem.ALIngredient -> {
                     val action = AdminListFragmentDirections.actionAdminListFragmentToIngredientEditDialog(item.id)
                     findNavController().navigate(action)
                 }
-                is AdminListItem.ALDescriptorCategory -> {}
-                is AdminListItem.ALDescriptor -> {}
+                is AdminListItem.ALDescriptorCategory -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragmentToDescriptorCategoryEditDialog(item.id)
+                    findNavController().navigate(action)
+                }
+                is AdminListItem.ALDescriptor -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragmentToDescriptorEditDialog(item.id)
+                    findNavController().navigate(action)
+                }
         }
         }
         val rv : RecyclerView = view.findViewById(R.id.adminRV)

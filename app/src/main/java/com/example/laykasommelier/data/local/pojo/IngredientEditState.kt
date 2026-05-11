@@ -1,0 +1,10 @@
+package com.example.laykasommelier.data.local.pojo
+
+data class IngredientEditState(
+    val name: String = "",
+    val acidity: String = "",
+    val sugarLevel: String = "",
+    val selectedDescriptorIds: Set<Long> = emptySet(),
+    val searchQuery: String = "",
+    val selectedCategoryId: Long? = null   // null = все категории
+)

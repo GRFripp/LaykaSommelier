@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.laykasommelier.data.local.entities.MakingMethod
 import com.example.laykasommelier.data.local.pojo.AdminListItem
 import kotlinx.coroutines.flow.Flow
@@ -12,11 +13,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MakingMethodDao {
     @Query("Select * from MakingMethods")
-    fun getAllDrinks(): Flow<List<MakingMethod>>
+    fun getAllMakingMethods(): Flow<List<MakingMethod>>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDrink(makingMethod: MakingMethod): Long
+    suspend fun insertMakingMethods(makingMethod: MakingMethod): Long
     @Delete
-    suspend fun deleteDrink(makingMethod: MakingMethod)
+    suspend fun deleteMakingMethods(makingMethod: MakingMethod)
 
     @Query("""
         Select makingMethodID as id, makingMethodName as name, makingMethodDilution as dilution
@@ -30,4 +31,10 @@ interface MakingMethodDao {
         where id = :id
     """)
     fun getMakingMethodById(id: Long): Flow<AdminListItem.ALMakingMethod>
+
+    @Query("SELECT * FROM MakingMethods WHERE makingMethodID = :id")
+    suspend fun getMethodById(id: Long): MakingMethod?
+
+    @Update
+    suspend fun updateMethod(method: MakingMethod)
 }

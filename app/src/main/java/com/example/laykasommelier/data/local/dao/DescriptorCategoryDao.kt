@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.laykasommelier.data.local.entities.*
 import com.example.laykasommelier.data.local.pojo.AdminListItem
 import kotlinx.coroutines.flow.Flow
@@ -22,4 +23,9 @@ interface DescriptorCategoryDao {
         From DescriptorCategories
     """)
     fun getALDescriptorCategories(): Flow<List<AdminListItem.ALDescriptorCategory>>
+    @Query("SELECT * FROM DescriptorCategories WHERE descriptorCategoryID = :id")
+    suspend fun getCategoryById(id: Long): DescriptorCategory?
+
+    @Update
+    suspend fun updateCategory(category: DescriptorCategory)
 }

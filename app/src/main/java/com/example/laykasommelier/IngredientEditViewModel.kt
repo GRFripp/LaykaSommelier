@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.DescriptorCategory
 import com.example.laykasommelier.data.local.entities.Ingredient
 import com.example.laykasommelier.data.local.pojo.DescriptorWithCategory
+import com.example.laykasommelier.data.local.pojo.IngredientEditState
 import com.example.laykasommelier.data.local.repositories.DescriptorCategoryRepository
 import com.example.laykasommelier.data.local.repositories.DescriptorRepository
 import com.example.laykasommelier.data.local.repositories.IngredientRepository

@@ -15,6 +15,15 @@
         <action
             android:id="@+id/action_adminListFragment_to_ingredientEditDialog"
             app:destination="@id/ingredientEditDialog" />
+        <action
+            android:id="@+id/action_adminListFragment_to_descriptorEditDialog"
+            app:destination="@id/descriptorEditDialog" />
+        <action
+            android:id="@+id/action_adminListFragment_to_descriptorCategoryEditDialog"
+            app:destination="@id/descriptorCategoryEditDialog" />
+        <action
+            android:id="@+id/action_adminListFragment_to_makingMethodEditDialog"
+            app:destination="@id/makingMethodEditDialog" />
     </fragment>
 
     <dialog
@@ -29,5 +38,29 @@
         android:id="@+id/ingredientEditDialog"
         android:name="com.example.laykasommelier.IngredientEditFragment">
         <argument android:name="ingredientId" app:argType="long" android:defaultValue="-1L"/>
+    </dialog>
+    <dialog
+        android:id="@+id/descriptorEditDialog"
+        android:name="com.example.laykasommelier.DescriptorEditDialog">
+        <argument
+            android:name="descriptorId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </dialog>
+    <dialog
+        android:id="@+id/descriptorCategoryEditDialog"
+        android:name="com.example.laykasommelier.DescriptorCategoryEditDialog">
+        <argument
+            android:name="categoryId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </dialog>
+    <dialog
+        android:id="@+id/makingMethodEditDialog"
+        android:name="com.example.laykasommelier.MakingMethodEditDialog">
+        <argument
+            android:name="methodId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </dialog>
 </navigation>

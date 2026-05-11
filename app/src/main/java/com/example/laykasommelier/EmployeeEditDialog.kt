@@ -44,14 +44,15 @@ class EmployeeEditDialog: DialogFragment() {
         spinnerRole.adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, roleLabels)
 
-        // Подписка на состояние (заполнение полей)
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collect { state ->
-                if (etName.text.toString() != state.name) etName.setText(state.name)
-                // Установим выбранную роль
-                val roleIndex = roles.indexOf(state.role)
-                if (roleIndex >= 0) spinnerRole.setSelection(roleIndex)
-                // Пароль не показываем, но если нужно сбросить, оставляем пустым
+                // Для каждого EditText, например, etName
+                if (etName.text.toString() != state.name) {
+                    val selection = etName.selectionStart
+                    etName.setText(state.name)
+                    etName.setSelection(minOf(selection, state.name.length))
+                }
+                // Аналогично для etAcidity, etSugar и других полей
             }
         }
 
