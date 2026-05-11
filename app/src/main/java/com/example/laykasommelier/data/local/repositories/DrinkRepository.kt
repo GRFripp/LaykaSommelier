@@ -5,8 +5,10 @@ import kotlinx.coroutines.flow.Flow
 import com.example.laykasommelier.data.local.dao.DrinkDao
 import com.example.laykasommelier.data.local.entities.Drink
 import com.example.laykasommelier.data.local.pojo.CategoryColor
+import com.example.laykasommelier.data.local.pojo.DescriptorChip
 import com.example.laykasommelier.data.local.pojo.DrinkDetail
 import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
+import com.example.laykasommelier.data.local.pojo.DrinkReviewItem
 import kotlinx.coroutines.flow.map
 
 class DrinkRepository(private val  drinkDao: DrinkDao) {
@@ -28,5 +30,30 @@ class DrinkRepository(private val  drinkDao: DrinkDao) {
                 }
         }
     }
+    fun getDrinkReviews(drinkId: Long): Flow<List<DrinkReviewItem>> {
+        return drinkDao.getReviewRows(drinkId).map { rows ->
+            rows.groupBy { it.reviewId }.map { (reviewId, group) ->
+                val first = group.first()
+                DrinkReviewItem(
+                    reviewId = reviewId,
+                    sourceName = first.sourceName,
+                    sourceUrl = first.sourceUrl,
+                    descriptors = group
+                        .filter { it.descriptorName != null }
+                        .map {
+                            DescriptorChip(
+                                it.descriptorName!!,
+                                it.descriptorColor ?: "#888888"
+                            )
+                        }
+                        .distinct()
+                )
+            }
+        }
+    }
     fun getDrinkById(drinkId: Long): Flow<DrinkDetail> = drinkDao.getDrinkById(drinkId)
+
+    suspend fun insertDrink(drink: Drink): Long = drinkDao.insertDrink(drink)
+
+    suspend fun updateDrink(drink: Drink) = drinkDao.updateDrink(drink)
 }

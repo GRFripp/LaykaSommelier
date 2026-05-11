@@ -1,4 +1,4 @@
-package com.example.laykasommelier
+package com.example.laykasommelier.viewModels
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.DescriptorCategory
 import com.example.laykasommelier.data.local.entities.Ingredient
 import com.example.laykasommelier.data.local.pojo.DescriptorWithCategory
-import com.example.laykasommelier.data.local.pojo.IngredientEditState
+import com.example.laykasommelier.data.local.pojo.editstates.IngredientEditState
 import com.example.laykasommelier.data.local.repositories.DescriptorCategoryRepository
 import com.example.laykasommelier.data.local.repositories.DescriptorRepository
 import com.example.laykasommelier.data.local.repositories.IngredientRepository

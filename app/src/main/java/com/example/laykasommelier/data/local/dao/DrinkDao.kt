@@ -5,11 +5,13 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 import com.example.laykasommelier.data.local.entities.Drink
 import com.example.laykasommelier.data.local.pojo.DrinkDetail
 import com.example.laykasommelier.data.local.pojo.DrinkListRow
 import com.example.laykasommelier.data.local.pojo.DrinkListTypes
+import com.example.laykasommelier.data.local.pojo.ReviewRow
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -51,4 +53,23 @@ interface DrinkDao {
         Where Drinks.drinkID = :drinkId
     """)
     fun getDrinkById(drinkId: Long): Flow<DrinkDetail>
+
+    @Query("""
+    SELECT r.reviewID AS reviewId,
+           s.sourceName AS sourceName,
+           s.sourceUrl AS sourceUrl,
+           d.descriptorName AS descriptorName,
+           dc.descriptorCategoryColor AS descriptorColor
+    FROM Reviews r
+    INNER JOIN Sources s ON r.reviewSourceID = s.sourceID
+    LEFT JOIN DescriptorsReviews dr ON r.reviewID = dr.reviewID
+    LEFT JOIN Descriptors d ON dr.descriptorID = d.descriptorID
+    LEFT JOIN DescriptorCategories dc ON d.descriptorCategory = dc.descriptorCategoryID
+    WHERE r.reviewedDrinkID = :drinkId
+    ORDER BY r.reviewID, d.descriptorName
+""")
+    fun getReviewRows(drinkId: Long): Flow<List<ReviewRow>>
+
+    @Update
+    suspend fun updateDrink(drink: Drink)
 }

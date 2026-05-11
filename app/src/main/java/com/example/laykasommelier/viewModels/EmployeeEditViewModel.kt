@@ -1,10 +1,10 @@
-package com.example.laykasommelier
+package com.example.laykasommelier.viewModels
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.Employee
-import com.example.laykasommelier.data.local.pojo.EmployeeEditState
+import com.example.laykasommelier.data.local.pojo.editstates.EmployeeEditState
 import com.example.laykasommelier.data.local.repositories.EmployeeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

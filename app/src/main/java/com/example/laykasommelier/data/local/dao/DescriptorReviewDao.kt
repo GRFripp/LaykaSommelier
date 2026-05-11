@@ -12,8 +12,15 @@ import kotlinx.coroutines.flow.Flow
 interface DescriptorReviewDao {
     @Query("Select * from DescriptorsReviews")
     fun getAllDescriptorsReviews(): Flow<List<DescriptorReview>>
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDescriptorReview(descriptorReview: DescriptorReview): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertLink(link: DescriptorReview): Long
     @Delete
     suspend fun deleteDescriptorReview(descriptorReview: DescriptorReview)
+
+    @Query("DELETE FROM DescriptorsReviews WHERE reviewID = :reviewId")
+    suspend fun deleteAllByReviewId(reviewId: Long)
+
+    @Query("SELECT descriptorID FROM DescriptorsReviews WHERE reviewID = :reviewId")
+    suspend fun getDescriptorIdsByReviewId(reviewId: Long): List<Long>
+
 }

@@ -15,7 +15,9 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.example.laykasommelier.data.local.pojo.IngredientEditState
+import com.example.laykasommelier.data.local.pojo.editstates.IngredientEditState
+import com.example.laykasommelier.viewModels.IngredientEditViewModel
+
 @AndroidEntryPoint
 class IngredientEditFragment: DialogFragment() {
     private val viewModel: IngredientEditViewModel by viewModels()

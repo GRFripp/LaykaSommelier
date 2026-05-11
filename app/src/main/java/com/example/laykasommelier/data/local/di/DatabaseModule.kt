@@ -11,6 +11,8 @@ import com.example.laykasommelier.data.local.repositories.DrinkRepository
 import com.example.laykasommelier.data.local.repositories.EmployeeRepository
 import com.example.laykasommelier.data.local.repositories.IngredientRepository
 import com.example.laykasommelier.data.local.repositories.MakingMethodRepository
+import com.example.laykasommelier.data.local.repositories.ReviewRepository
+import com.example.laykasommelier.data.local.repositories.SourceRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -92,4 +94,12 @@ class DatabaseModule {
     fun provideMethodRepo(makingMethodDao: MakingMethodDao): MakingMethodRepository=
         MakingMethodRepository(makingMethodDao)
 
+    @Provides
+    @Singleton
+    fun provideReviewRepo(reviewDao: ReviewDao, descriptorReviewDao: DescriptorReviewDao): ReviewRepository =
+        ReviewRepository(reviewDao, descriptorReviewDao)
+    @Provides
+    @Singleton
+    fun provideSourceRepo(sourceDao: SourceDao): SourceRepository=
+        SourceRepository(sourceDao)
 }

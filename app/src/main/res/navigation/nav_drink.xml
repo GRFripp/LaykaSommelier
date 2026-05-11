@@ -35,5 +35,26 @@
         <argument
             android:name="drinkDetailID"
             app:argType="long"/>
+        <action
+            android:id="@+id/action_drinkDetailFragment_to_drinkEditFragment"
+            app:destination="@id/drinkEditFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/drinkEditFragment"
+        android:name="com.example.laykasommelier.DrinkEditFragment"
+        android:label="Редактирование напитка">
+        <argument
+            android:name="drinkId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_drinkEditFragment_to_reviewEditDialog"
+            app:destination="@id/reviewEditDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/reviewEditDialog"
+        android:name="com.example.laykasommelier.ReviewEditDialog">
+        <argument android:name="drinkId" app:argType="long" />
+        <argument android:name="reviewId" app:argType="long" android:defaultValue="-1L" />
+    </dialog>
 </navigation>

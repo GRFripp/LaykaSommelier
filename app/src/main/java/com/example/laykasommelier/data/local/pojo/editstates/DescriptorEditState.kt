@@ -1,4 +1,4 @@
-package com.example.laykasommelier.data.local.pojo
+package com.example.laykasommelier.data.local.pojo.editstates
 
 data class DescriptorEditState(
     val name: String = "",

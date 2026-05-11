@@ -1,16 +1,10 @@
-package com.example.laykasommelier
+package com.example.laykasommelier.viewModels
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
 import com.example.laykasommelier.data.local.pojo.DrinkListTypes
 import com.example.laykasommelier.data.local.repositories.DrinkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,11 +1,11 @@
-package com.example.laykasommelier
+package com.example.laykasommelier.viewModels
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.Descriptor
 import com.example.laykasommelier.data.local.entities.DescriptorCategory
-import com.example.laykasommelier.data.local.pojo.DescriptorEditState
+import com.example.laykasommelier.data.local.pojo.editstates.DescriptorEditState
 import com.example.laykasommelier.data.local.repositories.DescriptorCategoryRepository
 import com.example.laykasommelier.data.local.repositories.DescriptorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
