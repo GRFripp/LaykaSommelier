@@ -17,5 +17,7 @@ data class Ingredient (
     @ColumnInfo("ingredientSugarLevel")
     val ingredientSugarLevel: Double = 0.0,
     @ColumnInfo("ingredientAbv")
-    val ingredientAbv : Double = 0.00
+    val ingredientAbv : Double = 0.00,
+    @ColumnInfo("ingredientImageUrl")
+    val ingredientImageUrl: String
 )

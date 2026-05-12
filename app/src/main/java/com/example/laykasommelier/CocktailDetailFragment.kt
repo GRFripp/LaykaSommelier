@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.laykasommelier.viewModels.CocktailDetailViewModel
@@ -19,6 +22,7 @@ class CocktailDetailFragment : Fragment() {
 
     private val viewModel: CocktailDetailViewModel by viewModels()
     private lateinit var ingredientAdapter: CocktailIngredientAdapter
+    private val args: CocktailDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +34,14 @@ class CocktailDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Кнопка «Редактировать»
+        val btnEdit = view.findViewById<Button>(R.id.cocktailEditBtn)
+        btnEdit.setOnClickListener {
+            val action = CocktailDetailFragmentDirections
+                .actionCocktailDetailFragmentToCocktailEditFragment(args.cocktailDetailId)
+            findNavController().navigate(action)
+        }
 
         // Инициализация View
         val tvName = view.findViewById<TextView>(R.id.cocktailDetailName)
@@ -46,7 +58,7 @@ class CocktailDetailFragment : Fragment() {
 
         // Адаптер ингредиентов
         ingredientAdapter = CocktailIngredientAdapter { ingredientId ->
-            // Реакция на клик (можно будет добавить редактирование)
+            // Пока без действия, можно будет добавить детали ингредиента
         }
         rvIngredients.layoutManager = LinearLayoutManager(requireContext())
         rvIngredients.adapter = ingredientAdapter
@@ -82,4 +94,5 @@ class CocktailDetailFragment : Fragment() {
             }
         }
     }
+
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MakingMethodDao {
-    @Query("Select * from MakingMethods")
+    @Query("Select * from MakingMethods ORDER BY makingMethodName")
     fun getAllMakingMethods(): Flow<List<MakingMethod>>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMakingMethods(makingMethod: MakingMethod): Long

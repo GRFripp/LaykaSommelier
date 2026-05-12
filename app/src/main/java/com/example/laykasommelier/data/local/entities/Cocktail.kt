@@ -38,5 +38,7 @@ data class Cocktail(
     @ColumnInfo("cocktailAuthor")
     val cocktailAuthor: String = "unknown",
     @ColumnInfo("cocktailServing")
-    val cocktailServing: String
+    val cocktailServing: String,
+    @ColumnInfo("cocktailImageUrl")
+    val cocktailImageUrl: String
 )

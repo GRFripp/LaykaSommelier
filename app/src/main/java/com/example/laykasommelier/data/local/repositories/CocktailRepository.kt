@@ -1,12 +1,16 @@
 package com.example.laykasommelier.data.local.repositories
 
 import com.example.laykasommelier.data.local.dao.CocktailDao
+import com.example.laykasommelier.data.local.dao.CocktailIngredientDao
 import com.example.laykasommelier.data.local.dao.IngredientDao
 import com.example.laykasommelier.data.local.dao.MakingMethodDao
 import com.example.laykasommelier.data.local.entities.Cocktail
+import com.example.laykasommelier.data.local.entities.CocktailIngredient
+import com.example.laykasommelier.data.local.entities.Ingredient
 import com.example.laykasommelier.data.local.entities.MakingMethod
 import com.example.laykasommelier.data.local.pojo.CocktailDescriptors
 import com.example.laykasommelier.data.local.pojo.CocktailIngredientItem
+import com.example.laykasommelier.data.local.pojo.CocktailIngredientLinkItem
 import com.example.laykasommelier.data.local.pojo.CocktailListRow
 import kotlinx.coroutines.flow.Flow
 import com.example.laykasommelier.data.local.pojo.CocktailListPreviews
@@ -14,7 +18,7 @@ import com.example.laykasommelier.data.local.pojo.DescriptorChip
 import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
 import kotlinx.coroutines.flow.map
 
-class CocktailRepository(val cocktailDao: CocktailDao,val ingredientDao: IngredientDao, val makingMethodDao: MakingMethodDao) {
+class CocktailRepository(val cocktailDao: CocktailDao,val ingredientDao: IngredientDao, val makingMethodDao: MakingMethodDao, val cocktailIngredientDao: CocktailIngredientDao) {
     fun getCocktailPreviews(): Flow<List<CocktailListPreviews>> {
         return cocktailDao.getCocktailListRows().map{ rows ->
             rows.groupBy {it.cId}
@@ -60,6 +64,27 @@ class CocktailRepository(val cocktailDao: CocktailDao,val ingredientDao: Ingredi
         }
     }
     fun getMakingMethod(id: Long): Flow<MakingMethod?> = makingMethodDao.getMethodById(id)
+
+    suspend fun insertCocktail(cocktail: Cocktail): Long = cocktailDao.insertDrink(cocktail)
+    suspend fun updateCocktail(cocktail: Cocktail) = cocktailDao.updateCocktail(cocktail)
+
+    fun getCocktailIngredientsLinks(cocktailId: Long): Flow<List<CocktailIngredientLinkItem>> =
+        cocktailIngredientDao.getIngredientLinks(cocktailId)
+
+    suspend fun addIngredientLink(cocktailId: Long, ingredientId: Long, volume: Double) {
+        cocktailIngredientDao.insertLink(CocktailIngredient(cocktailId, ingredientId, volume))
+    }
+
+    suspend fun removeIngredientLink(cocktailId: Long, ingredientId: Long) {
+        cocktailIngredientDao.deleteLink(cocktailId, ingredientId)
+    }
+
+    suspend fun updateIngredientLinks(cocktailId: Long, links: List<CocktailIngredient>) {
+        cocktailIngredientDao.deleteAllLinksForCocktail(cocktailId)
+        links.forEach { cocktailIngredientDao.insertLink(it) }
+    }
+
+    fun getAllIngredients(): Flow<List<Ingredient>> = ingredientDao.getAllIngredients()
 }
 
 

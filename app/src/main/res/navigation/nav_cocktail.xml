@@ -20,5 +20,12 @@
             app:argType="long">
         </argument>
     </fragment>
-
+    <fragment
+        android:id="@+id/cocktailEditFragment"
+        android:name="com.example.laykasommelier.CocktailEditFragment"
+        android:label="Редактирование коктейля">
+        <argument android:name="cocktailId" app:argType="long" android:defaultValue="-1L"/>
+    </fragment>
+    <action android:id="@+id/action_cocktailDetailFragment_to_cocktailEditFragment"
+        app:destination="@id/cocktailEditFragment" />
 </navigation>

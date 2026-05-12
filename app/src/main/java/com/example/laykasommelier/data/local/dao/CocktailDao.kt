@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.laykasommelier.data.local.entities.Cocktail
 import com.example.laykasommelier.data.local.pojo.CocktailListRow
 import kotlinx.coroutines.flow.Flow
@@ -32,4 +33,7 @@ interface CocktailDao {
      fun getCocktailListRows(): Flow<List<CocktailListRow>>
     @Query("SELECT * FROM Cocktails WHERE cocktailID = :id")
     fun getCocktailById(id: Long): Flow<Cocktail>
+
+    @Update
+    suspend fun updateCocktail(cocktail: Cocktail)
 }

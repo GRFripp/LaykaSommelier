@@ -67,8 +67,8 @@ class DatabaseModule {
         AdminRepository(employeeDao,descriptorDao,descriptorCategoryDao,makingMethodDao,ingredientDao)
     @Provides
     @Singleton
-    fun provideCocktailRepo(cocktailDao: CocktailDao, ingredientDao: IngredientDao, makingMethodDao: MakingMethodDao): CocktailRepository =
-        CocktailRepository(cocktailDao,ingredientDao, makingMethodDao)
+    fun provideCocktailRepo(cocktailDao: CocktailDao, ingredientDao: IngredientDao, makingMethodDao: MakingMethodDao, cocktailIngredientDao: CocktailIngredientDao): CocktailRepository =
+        CocktailRepository(cocktailDao,ingredientDao, makingMethodDao, cocktailIngredientDao)
 
     @Provides
     @Singleton
