@@ -11,7 +11,7 @@ class MakingMethodRepository(private val methodDao: MakingMethodDao) {
     fun getALMethodsFlow(): Flow<List<AdminListItem.ALMakingMethod>> =
         methodDao.getALMakingMethods()
 
-    suspend fun getById(id: Long): MakingMethod =
+    fun getById(id: Long): Flow<MakingMethod> =
         methodDao.getMethodById(id) ?: throw Exception("Метод не найден")
 
     suspend fun insert(method: MakingMethod): Long = methodDao.insertMakingMethods(method)

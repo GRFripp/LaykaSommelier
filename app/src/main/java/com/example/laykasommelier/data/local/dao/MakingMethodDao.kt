@@ -33,7 +33,7 @@ interface MakingMethodDao {
     fun getMakingMethodById(id: Long): Flow<AdminListItem.ALMakingMethod>
 
     @Query("SELECT * FROM MakingMethods WHERE makingMethodID = :id")
-    suspend fun getMethodById(id: Long): MakingMethod?
+    fun getMethodById(id: Long): Flow<MakingMethod>
 
     @Update
     suspend fun updateMethod(method: MakingMethod)

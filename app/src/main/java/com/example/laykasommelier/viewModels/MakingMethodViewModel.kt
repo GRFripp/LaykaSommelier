@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ class MakingMethodViewModel @Inject constructor(
     init {
         if (methodId != -1L) {
             viewModelScope.launch {
-                val method = methodRepo.getById(methodId)
+                val method = methodRepo.getById(methodId).first() // получить первый эмит Flow
                 _state.value = MakingMethodEditState(
                     name = method.makingMethodName,
                     dilution = method.makingMethodDilution.toString()

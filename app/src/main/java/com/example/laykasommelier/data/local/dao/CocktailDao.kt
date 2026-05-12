@@ -30,5 +30,6 @@ interface CocktailDao {
         order by c.cocktailName
     """)
      fun getCocktailListRows(): Flow<List<CocktailListRow>>
-
+    @Query("SELECT * FROM Cocktails WHERE cocktailID = :id")
+    fun getCocktailById(id: Long): Flow<Cocktail>
 }

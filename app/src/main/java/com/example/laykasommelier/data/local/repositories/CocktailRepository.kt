@@ -1,14 +1,20 @@
 package com.example.laykasommelier.data.local.repositories
 
 import com.example.laykasommelier.data.local.dao.CocktailDao
+import com.example.laykasommelier.data.local.dao.IngredientDao
+import com.example.laykasommelier.data.local.dao.MakingMethodDao
+import com.example.laykasommelier.data.local.entities.Cocktail
+import com.example.laykasommelier.data.local.entities.MakingMethod
 import com.example.laykasommelier.data.local.pojo.CocktailDescriptors
+import com.example.laykasommelier.data.local.pojo.CocktailIngredientItem
 import com.example.laykasommelier.data.local.pojo.CocktailListRow
 import kotlinx.coroutines.flow.Flow
 import com.example.laykasommelier.data.local.pojo.CocktailListPreviews
+import com.example.laykasommelier.data.local.pojo.DescriptorChip
 import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
 import kotlinx.coroutines.flow.map
 
-class CocktailRepository(val cocktailDao: CocktailDao) {
+class CocktailRepository(val cocktailDao: CocktailDao,val ingredientDao: IngredientDao, val makingMethodDao: MakingMethodDao) {
     fun getCocktailPreviews(): Flow<List<CocktailListPreviews>> {
         return cocktailDao.getCocktailListRows().map{ rows ->
             rows.groupBy {it.cId}
@@ -27,6 +33,33 @@ class CocktailRepository(val cocktailDao: CocktailDao) {
         }
 
     }
+    fun getCocktail(id: Long): Flow<Cocktail> = cocktailDao.getCocktailById(id)
+
+    fun getCocktailIngredients(cocktailId: Long): Flow<List<CocktailIngredientItem>> {
+        return ingredientDao.getIngredientRows(cocktailId).map { rows ->
+            rows.groupBy { it.ingredientId }.map { (ingredientId, group) ->
+                val first = group.first()
+                CocktailIngredientItem(
+                    ingredientId = ingredientId,
+                    ingredientName = first.ingredientName,
+                    ingredientAbv = first.ingredientAbv,
+                    ingredientAcidity = first.ingredientAcidity,
+                    ingredientSugarLevel = first.ingredientSugarLevel,
+                    volumeInCocktail = first.volumeInCocktail,
+                    descriptors = group
+                        .filter { it.descriptorName != null }
+                        .map {
+                            DescriptorChip(
+                                name = it.descriptorName!!,
+                                color = it.descriptorColor ?: "#888888"
+                            )
+                        }
+                        .distinct()
+                )
+            }
+        }
+    }
+    fun getMakingMethod(id: Long): Flow<MakingMethod?> = makingMethodDao.getMethodById(id)
 }
 
 
