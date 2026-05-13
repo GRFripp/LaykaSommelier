@@ -104,7 +104,8 @@ class IngredientEditViewModel @Inject constructor(
                 ingredientID = if (ingredientId == -1L) 0L else ingredientId,
                 ingredientName = st.name,
                 ingredientAcidity = st.acidity.toDoubleOrNull() ?: 0.0,
-                ingredientSugarLevel = st.sugarLevel.toDoubleOrNull() ?: 0.0
+                ingredientSugarLevel = st.sugarLevel.toDoubleOrNull() ?: 0.0,
+                ingredientImageUrl = "null"
             )
             val newId = if (ingredientId == -1L) {
                 ingredientRepo.insertIngredient(ingredient)

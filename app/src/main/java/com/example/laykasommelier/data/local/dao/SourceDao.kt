@@ -21,4 +21,10 @@ interface SourceDao {
     suspend fun getSourceById(id: Long): Source?
     @Update
     suspend fun updateSource(source: Source)
+
+    @Query("DELETE FROM Sources")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<Source>)
 }

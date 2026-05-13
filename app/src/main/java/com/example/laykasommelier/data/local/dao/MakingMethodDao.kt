@@ -37,4 +37,10 @@ interface MakingMethodDao {
 
     @Update
     suspend fun updateMethod(method: MakingMethod)
+
+    @Query("DELETE FROM MakingMethods")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<MakingMethod>)
 }

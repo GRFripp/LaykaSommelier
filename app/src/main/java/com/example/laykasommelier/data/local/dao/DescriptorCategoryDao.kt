@@ -28,4 +28,9 @@ interface DescriptorCategoryDao {
 
     @Update
     suspend fun updateCategory(category: DescriptorCategory)
+    @Query("DELETE FROM DescriptorCategories")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<DescriptorCategory>)
 }

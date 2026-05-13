@@ -22,5 +22,9 @@ interface DescriptorReviewDao {
 
     @Query("SELECT descriptorID FROM DescriptorsReviews WHERE reviewID = :reviewId")
     suspend fun getDescriptorIdsByReviewId(reviewId: Long): List<Long>
+    @Query("DELETE FROM DescriptorsReviews")
+    suspend fun deleteAll()
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<DescriptorReview>)
 }

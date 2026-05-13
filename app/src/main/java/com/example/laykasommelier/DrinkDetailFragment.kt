@@ -12,12 +12,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.laykasommelier.data.local.pojo.DrinkDetail
 import com.example.laykasommelier.viewModels.DrinkDetailViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,9 +51,10 @@ class DrinkDetailFragment: Fragment() {
         val btnEdit: Button = view.findViewById(R.id.drinkEditBtn)
 
         btnEdit.setOnClickListener {
+            val navController = NavHostFragment.findNavController(this@DrinkDetailFragment)
             val action = DrinkDetailFragmentDirections
                 .actionDrinkDetailFragmentToDrinkEditFragment(args.drinkDetailID)
-            findNavController().navigate(action)
+            navController.navigate(action)
         }
         val reviewRV: RecyclerView = view.findViewById(R.id.drinkReviewRV)
         reviewRV.layoutManager = LinearLayoutManager(requireContext())
@@ -89,6 +92,10 @@ class DrinkDetailFragment: Fragment() {
             viewModel.reviews.collect { reviews ->
                 reviewAdapter.submitList(reviews)
             }
+        }
+        view.findViewById<FloatingActionButton>(R.id.fabDrinkDetail).setOnClickListener {
+            val action = DrinkDetailFragmentDirections.actionDrinkDetailFragmentToDrinkEditFragment(-1L)
+            findNavController().navigate(action)
         }
     }
 

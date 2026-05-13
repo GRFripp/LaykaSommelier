@@ -10,6 +10,9 @@
         <action
             android:id="@+id/action_cocktailListFragment_to_cocktailDetailFragment2"
             app:destination="@id/cocktailDetailFragment" />
+        <action
+            android:id="@+id/action_cocktailListFragment_to_cocktailEditFragment"
+            app:destination="@id/cocktailEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/cocktailDetailFragment"

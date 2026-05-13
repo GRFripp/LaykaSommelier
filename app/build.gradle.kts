@@ -2,19 +2,19 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-    //id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.example.laykasommelier"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.laykasommelier"
-        minSdk = 21
-        targetSdk = 35
+        minSdk = 23
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -58,10 +58,12 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
     ksp(libs.androidx.room.compiler)
 
-   // implementation(platform(libs.firebase.bom))
-   // implementation(libs.firebase.auth.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
    // implementation(libs.firebase.firestore.ktx)
     //implementation(libs.firebase.storage.ktx)
 
@@ -87,4 +89,11 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation("com.google.android.flexbox:flexbox:3.0.0")
 
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation(libs.gson)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
 }

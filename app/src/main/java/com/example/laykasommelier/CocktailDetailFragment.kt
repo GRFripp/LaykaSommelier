@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.laykasommelier.viewModels.CocktailDetailViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -92,6 +93,11 @@ class CocktailDetailFragment : Fragment() {
             viewModel.ingredients.collect { items ->
                 ingredientAdapter.submitList(items)
             }
+        }
+        view.findViewById<FloatingActionButton>(R.id.fabCocktailDetail).setOnClickListener {
+            val action = CocktailDetailFragmentDirections
+                .actionCocktailDetailFragmentToCocktailEditFragment(-1L)
+            findNavController().navigate(action)
         }
     }
 

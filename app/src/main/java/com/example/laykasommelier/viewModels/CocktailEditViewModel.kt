@@ -120,7 +120,8 @@ class CocktailEditViewModel @Inject constructor(
                 cocktailMakingMethodID = s.makingMethodId,
                 cocktailDescription = s.description,
                 cocktailAuthor = s.author,
-                cocktailServing = s.serving
+                cocktailServing = s.serving,
+                cocktailImageUrl = "placeholder"
             )
 
             if (cocktailId == -1L) {

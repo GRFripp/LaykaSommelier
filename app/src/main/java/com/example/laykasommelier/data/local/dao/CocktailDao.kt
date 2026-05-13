@@ -36,4 +36,10 @@ interface CocktailDao {
 
     @Update
     suspend fun updateCocktail(cocktail: Cocktail)
+
+    @Query("DELETE FROM Cocktails")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(cocktails: List<Cocktail>)
 }

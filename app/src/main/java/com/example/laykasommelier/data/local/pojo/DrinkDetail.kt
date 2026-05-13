@@ -17,7 +17,8 @@ data class DrinkDetail(
 
     val aged: Int,
 
-    val abv: Double
+    val abv: Double,
+    val imageUrl: String
 
 
 )

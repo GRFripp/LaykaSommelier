@@ -21,4 +21,9 @@ interface IngredientDescriptorDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertDescriptorLink(link: IngredientDescriptor)
+    @Query("DELETE FROM IngredientsDescriptors")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<IngredientDescriptor>)
 }

@@ -16,7 +16,22 @@
             android:text="Редактирование коктейля"
             android:textSize="20sp"
             android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/ivCocktailImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/ic_launcher_background"
+            android:contentDescription="Фото коктейля" />
 
+        <Button
+            android:id="@+id/btnLoadCocktailImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="Загрузить фото" />
         <EditText
             android:id="@+id/etCocktailName"
             android:layout_width="match_parent"

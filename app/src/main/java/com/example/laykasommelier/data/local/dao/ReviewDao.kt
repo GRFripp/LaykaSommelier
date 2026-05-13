@@ -40,4 +40,10 @@ interface ReviewDao {
     ORDER BY r.reviewID, d.descriptorName
 """)
     fun getReviewRowsByDrinkId(drinkId: Long): Flow<List<ReviewRow>>
+
+    @Query("DELETE FROM Reviews")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<Review>)
 }

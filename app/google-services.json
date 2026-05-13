@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "956638154461",
+    "project_id": "laykasommelier",
+    "storage_bucket": "laykasommelier.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956638154461:android:74d3e0f5ccdb02fa185534",
+        "android_client_info": {
+          "package_name": "com.example.laykasommelier"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYcL3VkXJE-fv5zkdv8yZAPzKDtqXTlMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956638154461:android:f6635afcca7d7ab2185534",
+        "android_client_info": {
+          "package_name": "com.example.severtest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYcL3VkXJE-fv5zkdv8yZAPzKDtqXTlMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

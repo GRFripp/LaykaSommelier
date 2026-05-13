@@ -35,4 +35,10 @@ interface CocktailIngredientDao {
     ORDER BY i.ingredientName
 """)
     fun getIngredientLinks(cocktailId: Long): Flow<List<CocktailIngredientLinkItem>>
+
+    @Query("DELETE FROM CocktailsIngredients")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<CocktailIngredient>)
 }

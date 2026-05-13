@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_drinkCategoriesFragment_to_drinkListTypeSelectedFragment"
             app:destination="@id/drinkListTypeSelectedFragment" />
+        <action
+            android:id="@+id/action_drinkCategoriesFragment_to_drinkEditFragment"
+            app:destination="@id/drinkEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/drinkListTypeSelectedFragment"
@@ -27,6 +30,9 @@
         <action
             android:id="@+id/action_drinkListTypeSelectedFragment_to_drinkDetailFragment"
             app:destination="@id/drinkDetailFragment" />
+        <action
+            android:id="@+id/action_drinkListTypeSelectedFragment_to_drinkEditFragment"
+            app:destination="@id/drinkEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/drinkDetailFragment"

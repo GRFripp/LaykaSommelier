@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -45,6 +46,10 @@ class DrinkListTypeSelectedFragment: Fragment() {
                 adapter.submitList(list)
             }
         }
-
+        view.findViewById<FloatingActionButton>(R.id.fabAddDrink).setOnClickListener {
+            val action = DrinkListTypeSelectedFragmentDirections
+                .actionDrinkListTypeSelectedFragmentToDrinkEditFragment(-1L)
+            findNavController().navigate(action)
+        }
     }
 }

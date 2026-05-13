@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.laykasommelier.viewModels.DrinkListTypeViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -35,14 +36,19 @@ class DrinkCategoriesFragment: Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = DrinkTypeAdapter{clickedType ->
+            val navController = androidx.navigation.fragment.NavHostFragment.findNavController(this@DrinkCategoriesFragment)
             val action = DrinkCategoriesFragmentDirections.actionDrinkCategoriesFragmentToDrinkListTypeSelectedFragment(clickedType)
-            findNavController().navigate(action)
+            navController.navigate(action)
         }
         recyclerView.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.drinkListTypes.collect {
                     list -> adapter.submitList(list)
             }
+        }
+        view.findViewById<FloatingActionButton>(R.id.fabDrinkType).setOnClickListener {
+            val action = DrinkCategoriesFragmentDirections.actionDrinkCategoriesFragmentToDrinkEditFragment(-1L)
+            findNavController().navigate(action)
         }
     }
 }

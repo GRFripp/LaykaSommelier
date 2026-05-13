@@ -55,5 +55,9 @@ interface IngredientDao {
     """)
     fun getIngredientRows(cocktailId: Long): Flow<List<IngredientRow>>
 
+    @Query("DELETE FROM Ingredients")
+    suspend fun deleteAll()
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(ingredients: List<Ingredient>)
 }

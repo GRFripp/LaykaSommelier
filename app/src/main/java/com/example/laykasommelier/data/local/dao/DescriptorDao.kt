@@ -58,4 +58,9 @@ interface DescriptorDao {
 
     @Update
     suspend fun updateDescriptor(descriptor: Descriptor)
+    @Query("DELETE FROM Descriptors")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<Descriptor>)
 }

@@ -11,9 +11,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SuggestionDao {
     @Query("Select * from Suggestions")
-    fun getAllDrinks(): Flow<List<Suggestion>>
+    fun getAllSuggestion(): Flow<List<Suggestion>>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDrink(suggestion: Suggestion): Long
+    suspend fun insertSuggestion(suggestion: Suggestion): Long
     @Delete
-    suspend fun deleteDrink(suggestion: Suggestion)
+    suspend fun deleteSuggestion(suggestion: Suggestion)
+
+    @Query("DELETE FROM Suggestions")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<Suggestion>)
 }

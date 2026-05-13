@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.laykasommelier.data.local.pojo.AdminEntityType
 import com.example.laykasommelier.data.local.pojo.AdminListItem
 import com.example.laykasommelier.viewModels.AdminViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -84,6 +85,32 @@ class AdminListFragment: Fragment() {
         }
         btnPrev.setOnClickListener { shiftType(-1) }
         btnNext.setOnClickListener { shiftType(1) }
+        val fabAdd = view.findViewById<FloatingActionButton>(R.id.fabAddAdmin)
+        fabAdd.setOnClickListener {
+            val type = viewModel.currentType.value
+            when (type) {
+                AdminEntityType.EMPLOYEES -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragment2ToEmployeeEditDialog(-1L)
+                    findNavController().navigate(action)
+                }
+                AdminEntityType.INGREDIENTS -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragmentToIngredientEditDialog(-1L)
+                    findNavController().navigate(action)
+                }
+                AdminEntityType.DESCRIPTORS -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragmentToDescriptorEditDialog(-1L)
+                    findNavController().navigate(action)
+                }
+                AdminEntityType.DESCRIPTORCATEGORIES -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragmentToDescriptorCategoryEditDialog(-1L)
+                    findNavController().navigate(action)
+                }
+                AdminEntityType.MAKINGMETHODS -> {
+                    val action = AdminListFragmentDirections.actionAdminListFragmentToMakingMethodEditDialog(-1L)
+                    findNavController().navigate(action)
+                }
+            }
+        }
     }
     private fun updateCarousel(currentIndex: Int, tvCurrent:TextView,tvNext:TextView,tvPrev: TextView){
         if (allTypes.isEmpty()) return

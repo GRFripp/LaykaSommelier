@@ -48,7 +48,7 @@ interface DrinkDao {
     fun getDrinkListRow(drinkType: String): Flow<List<DrinkListRow>>
 
     @Query("""
-        Select drinkName as name,drinkType as type,drinkSubType as subType,drinkCountry as country,drinkProducer as producer,drinkAged as aged,drinkAbv as abv
+        Select drinkName as name,drinkType as type,drinkSubType as subType,drinkCountry as country,drinkProducer as producer,drinkAged as aged,drinkAbv as abv,drinkImageUrl as imageUrl
         from Drinks
         Where Drinks.drinkID = :drinkId
     """)
@@ -72,4 +72,11 @@ interface DrinkDao {
 
     @Update
     suspend fun updateDrink(drink: Drink)
+
+    @Query("DELETE FROM Drinks")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(drinks: List<Drink>)
+
 }

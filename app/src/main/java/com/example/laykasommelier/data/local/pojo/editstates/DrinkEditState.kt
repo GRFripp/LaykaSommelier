@@ -6,5 +6,6 @@ data class DrinkEditState(
     val country: String = "",
     val producer: String = "",
     val aged: String = "",
-    val abv: String = ""
+    val abv: String = "",
+    val imageUrl: String = ""
 )

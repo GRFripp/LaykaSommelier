@@ -31,4 +31,10 @@ interface EmployeeDao {
 
     @Update
     suspend fun update(employee: Employee)
+
+    @Query("DELETE FROM Employees")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<Employee>)
 }
