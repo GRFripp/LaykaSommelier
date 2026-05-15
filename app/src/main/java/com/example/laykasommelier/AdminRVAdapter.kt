@@ -72,7 +72,7 @@ class AdminRVAdapter(
                 is AdminListItem.ALEmployee -> {
                     icon.setImageResource(R.drawable.ic_launcher_background)
                     tv1.text = item.name
-                    tv2.text = item.position
+                    tv2.text = item.email
                 }
 
                 is AdminListItem.ALIngredient -> {

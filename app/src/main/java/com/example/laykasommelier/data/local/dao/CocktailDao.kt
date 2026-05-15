@@ -20,16 +20,19 @@ interface CocktailDao {
     suspend fun deleteDrink(cocktail: Cocktail)
 
     @Query("""
-        Select c.cocktailID as cId, c.cocktailName as cName, d.descriptorName as dName, dc.descriptorCategoryColor as dColor
-        From 
-        Cocktails as c left join CocktailsIngredients as ci on c.cocktailID = ci.cocktailID
-        left join Ingredients as i on ci.ingredientID = i.ingredientID
-        left join IngredientsDescriptors as id on i.ingredientID = id.ingredientID
-        left join descriptors as d on id.ingredientID = d.descriptorID
-        left join DescriptorCategories as dc on d.descriptorCategory = dc.descriptorCategoryID
-        group by c.cocktailID, dc.descriptorCategoryColor
-        order by c.cocktailName
-    """)
+    SELECT c.cocktailID AS cId, c.cocktailName AS cName,
+           d.descriptorName AS dName, dc.descriptorCategoryColor AS dColor, c.cocktailImageUrl as cImageUrl
+    FROM Cocktails c
+    LEFT JOIN CocktailsIngredients ci ON c.cocktailID = ci.cocktailID
+    LEFT JOIN Ingredients i ON ci.ingredientID = i.ingredientID
+    LEFT JOIN IngredientsDescriptors id ON i.ingredientID = id.ingredientID
+    LEFT JOIN Descriptors d ON id.descriptorID = d.descriptorID
+    LEFT JOIN DescriptorCategories dc ON d.descriptorCategory = dc.descriptorCategoryID
+    LEFT JOIN Suggestions s ON c.cocktailID = s.suggestedCocktailID
+    WHERE s.suggestionStatus != 'pending' OR s.suggestionID IS NULL
+    GROUP BY c.cocktailID, dc.descriptorCategoryColor
+    ORDER BY c.cocktailName
+""")
      fun getCocktailListRows(): Flow<List<CocktailListRow>>
     @Query("SELECT * FROM Cocktails WHERE cocktailID = :id")
     fun getCocktailById(id: Long): Flow<Cocktail>

@@ -31,4 +31,6 @@
     </fragment>
     <action android:id="@+id/action_cocktailDetailFragment_to_cocktailEditFragment"
         app:destination="@id/cocktailEditFragment" />
+
+
 </navigation>

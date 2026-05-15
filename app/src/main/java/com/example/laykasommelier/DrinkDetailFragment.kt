@@ -17,17 +17,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.laykasommelier.data.local.pojo.DrinkDetail
+import com.example.laykasommelier.data.local.pojo.EmployeeRole
 import com.example.laykasommelier.viewModels.DrinkDetailViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DrinkDetailFragment: Fragment() {
 
     private val viewModel: DrinkDetailViewModel by viewModels()
     lateinit var chosenDrink: DrinkDetail
+    @Inject
+    lateinit var sessionManager: SessionManager
     val args: DrinkDetailFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +53,10 @@ class DrinkDetailFragment: Fragment() {
         val ddProducerTV: TextView = view.findViewById(R.id.drinkDetailDrinkProducer)
         val ddAgedTV: TextView = view.findViewById(R.id.drinkDetailDrinkAged)
         val ddAbvTV: TextView = view.findViewById(R.id.drinkDetailDrinkAbv)
-        val btnEdit: Button = view.findViewById(R.id.drinkEditBtn)
 
+        val role = sessionManager.getRole()
+        val btnEdit = view.findViewById<Button>(R.id.drinkEditBtn)
+        btnEdit.visibility = if (role == EmployeeRole.BARTENDER || role == EmployeeRole.MANAGER) View.VISIBLE else View.GONE
         btnEdit.setOnClickListener {
             val navController = NavHostFragment.findNavController(this@DrinkDetailFragment)
             val action = DrinkDetailFragmentDirections
@@ -71,18 +78,26 @@ class DrinkDetailFragment: Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.drinkDetail.collect { drinkDetail ->
                 drinkDetail?.let { drink ->
-                    ddNameTV.text = drink.name
-                    ddTypeTV.text = drink.type
+                    ddNameTV.text = drink.name ?: ""
+                    ddTypeTV.text = drink.type ?: ""
                     ddSubTypeTV.text = drink.subType ?: ""
                     ddCountryTV.text = drink.country ?: ""
                     ddProducerTV.text = drink.producer ?: ""
                     ddAgedTV.text = if (drink.aged > 0) drink.aged.toString() else "–"
                     ddAbvTV.text = "${drink.abv}%"
-                    // Картинка через Glide
-                    //Glide.with(this@DrinkDetailFragment)
-                    //    .load(drink.imageUrl)
-                    //    .placeholder(R.drawable.ic_launcher_background)
-                    //    .into(ddIV)
+
+                    val imageUrl = drink.imageUrl
+                    if (!imageUrl.isNullOrEmpty()) {
+                        val fullUrl = "http://10.0.2.2:5169" + (if (imageUrl.startsWith("/")) imageUrl else "/$imageUrl")
+                        Glide.with(this@DrinkDetailFragment)
+                            .load(fullUrl)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .error(R.drawable.ic_launcher_background)
+                            .centerCrop()
+                            .into(ddIV)
+                    } else {
+                        ddIV.setImageResource(R.drawable.ic_launcher_background)
+                    }
                 }
             }
         }

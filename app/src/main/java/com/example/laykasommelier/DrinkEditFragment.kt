@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.example.laykasommelier.network.RetrofitClient
 import com.example.laykasommelier.viewModels.DrinkEditViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -52,33 +53,37 @@ class DrinkEditFragment: Fragment() {
         val btnAddReview = view.findViewById<Button>(R.id.btnAddReview)
         val ivDrinkImage = view.findViewById<ImageView>(R.id.ivDrinkImage)
         val btnLoadDrinkImage = view.findViewById<Button>(R.id.btnLoadDrinkImage)
+
         btnLoadDrinkImage.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
 
-        // Предпросмотр изображения
+        // === Загрузка изображения (объединённая подписка на локальный uri и URL из состояния) ===
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.selectedImageUri.collect { uri ->
+            combine(viewModel.selectedImageUri, viewModel.state) { uri, state ->
+                uri to state.imageUrl
+            }.collect { (uri, imageUrl) ->
                 if (uri != null) {
                     Glide.with(this@DrinkEditFragment)
                         .load(uri)
                         .centerCrop()
                         .into(ivDrinkImage)
+                } else if (!imageUrl.isNullOrEmpty()) {
+                    val fullUrl = "http://10.0.2.2:5169" +
+                            (if (imageUrl.startsWith("/")) imageUrl else "/$imageUrl")
+                    Glide.with(this@DrinkEditFragment)
+                        .load(fullUrl)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                        .centerCrop()
+                        .into(ivDrinkImage)
                 } else {
-                    // Показать текущий URL, если есть
-                    val imageUrl = viewModel.state.value.imageUrl
-                    if (!imageUrl.isNullOrEmpty()) {
-                        Glide.with(this@DrinkEditFragment)
-                            .load("http://10.0.2.2:5169" + imageUrl)
-                            .centerCrop()
-                            .into(ivDrinkImage)
-                    } else {
-                        ivDrinkImage.setImageResource(R.drawable.ic_launcher_background)
-                    }
+                    ivDrinkImage.setImageResource(R.drawable.ic_launcher_background)
                 }
             }
         }
 
+        // === Адаптер рецензий ===
         reviewAdapter = ReviewDrinkAdapter { reviewId ->
             val action = DrinkEditFragmentDirections.actionDrinkEditFragmentToReviewEditDialog(
                 viewModel.drinkId, reviewId
@@ -88,7 +93,7 @@ class DrinkEditFragment: Fragment() {
         rvReviews.layoutManager = LinearLayoutManager(requireContext())
         rvReviews.adapter = reviewAdapter
 
-        // Подписка на состояние напитка
+        // === Подписка на состояние напитка ===
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collect { state ->
                 if (etName.text.toString() != state.name) {
@@ -128,9 +133,8 @@ class DrinkEditFragment: Fragment() {
                 }
             }
         }
-        btnSaveDrink.setOnClickListener {
-            viewModel.saveDrink()
-        }
+
+        // === Слушатели ввода ===
         etName.doAfterTextChanged { viewModel.onNameChanged(it) }
         etType.doAfterTextChanged { viewModel.onTypeChanged(it) }
         etSubType.doAfterTextChanged { viewModel.onSubTypeChanged(it) }
@@ -139,15 +143,19 @@ class DrinkEditFragment: Fragment() {
         etAged.doAfterTextChanged { viewModel.onAgedChanged(it) }
         etAbv.doAfterTextChanged { viewModel.onAbvChanged(it) }
 
-        // Подписка на список рецензий
+        // === Кнопка сохранения ===
+        btnSaveDrink.setOnClickListener {
+            viewModel.saveDrink()
+        }
+
+        // === Подписка на список рецензий ===
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.reviews.collect { reviewList ->
                 reviewAdapter.submitList(reviewList)
             }
         }
 
-
-// При добавлении новой рецензии
+        // === Кнопка добавления рецензии ===
         btnAddReview.setOnClickListener {
             val action = DrinkEditFragmentDirections
                 .actionDrinkEditFragmentToReviewEditDialog(viewModel.drinkId, -1L)

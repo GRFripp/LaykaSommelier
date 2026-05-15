@@ -26,7 +26,8 @@ interface ApiService {
 
     @GET("api/cocktailingredients")
     suspend fun getCocktailIngredients(): List<CocktailIngredientDto>
-
+    @PUT("api/suggestions/{id}/status")
+    suspend fun updateSuggestionStatus(@Path("id") id: Long, @Body request: SuggestionStatusUpdateRequest)
     @GET("api/descriptorcategories")
     suspend fun getDescriptorCategories(): List<DescriptorCategoryDto>
 
@@ -72,7 +73,7 @@ interface ApiService {
     suspend fun createCocktail(@Body cocktail: CocktailCreateRequest): CocktailDto
 
     @PUT("api/cocktails/{id}")
-    suspend fun updateCocktail(@Path("id") id: Long, @Body cocktail: CocktailUpdateRequest)
+    suspend fun updateCocktail(@Path("id") id: Long, @Body cocktail: CocktailCreateRequest)
 
     @DELETE("api/cocktails/{id}")
     suspend fun deleteCocktail(@Path("id") id: Long)
@@ -82,7 +83,7 @@ interface ApiService {
     suspend fun createIngredient(@Body ingredient: IngredientCreateRequest): IngredientDto
 
     @PUT("api/ingredients/{id}")
-    suspend fun updateIngredient(@Path("id") id: Long, @Body ingredient: IngredientUpdateRequest)
+    suspend fun updateIngredient(@Path("id") id: Long, @Body ingredient: IngredientCreateRequest)
 
     @DELETE("api/ingredients/{id}")
     suspend fun deleteIngredient(@Path("id") id: Long)
@@ -108,7 +109,7 @@ interface ApiService {
     suspend fun createDescriptorCategory(@Body request: DescriptorCategoryCreateRequest): DescriptorCategoryDto
 
     @PUT("api/descriptorcategories/{id}")
-    suspend fun updateDescriptorCategory(@Path("id") id: Long, @Body request: DescriptorCategoryUpdateRequest)
+    suspend fun updateDescriptorCategory(@Path("id") id: Long, @Body request: DescriptorCategoryCreateRequest)
 
     @DELETE("api/descriptorcategories/{id}")
     suspend fun deleteDescriptorCategory(@Path("id") id: Long)
@@ -118,7 +119,7 @@ interface ApiService {
     suspend fun createDescriptor(@Body request: DescriptorCreateRequest): DescriptorDto
 
     @PUT("api/descriptors/{id}")
-    suspend fun updateDescriptor(@Path("id") id: Long, @Body request: DescriptorUpdateRequest)
+    suspend fun updateDescriptor(@Path("id") id: Long, @Body request: DescriptorCreateRequest)
 
     @DELETE("api/descriptors/{id}")
     suspend fun deleteDescriptor(@Path("id") id: Long)
@@ -178,6 +179,6 @@ interface ApiService {
 }
 
 data class TokenRequest(val token: String)
-data class VerifyTokenResponse(val uid: String, val email: String)
+
 
 data class ImageUploadResponse(val url: String)

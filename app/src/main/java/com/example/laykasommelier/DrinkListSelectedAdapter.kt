@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.laykasommelier.DrinkTypeAdapter
 import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
 import com.example.laykasommelier.data.local.pojo.DrinkListTypes
@@ -50,7 +51,19 @@ class DrinkListSelectedAdapter(private val onItemClick: (Long) -> Unit)
         fun bind(item: DrinkListPreviews, onItemClick: (Long) -> Unit){
 
             drinkTextView.text  = item.drinkName
-
+            val imageUrl = item.imageUrl
+            if (!imageUrl.isNullOrEmpty()) {
+                val fullUrl = "http://10.0.2.2:5169" +
+                        (if (imageUrl.startsWith("/")) imageUrl else "/$imageUrl")
+                Glide.with(itemView.context)
+                    .load(fullUrl)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_background)
+                    .centerCrop()
+                    .into(drinkImageView)
+            } else {
+                drinkImageView.setImageResource(R.drawable.ic_launcher_background)
+            }
             drinkDesCategories.removeAllViews()
             item.categories.forEach { categoryColor ->
                 val chip = Chip(
@@ -77,8 +90,6 @@ class DrinkListSelectedAdapter(private val onItemClick: (Long) -> Unit)
 
             }
 
-            //Потом поменяем на Glide, когда на сервере будут данные
-            drinkImageView.setImageResource(R.drawable.ic_launcher_background)
 
             itemView.setOnClickListener {
                 onItemClick(item.drinkId)

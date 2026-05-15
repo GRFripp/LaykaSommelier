@@ -1,11 +1,14 @@
 package com.example.laykasommelier.viewModels
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.MakingMethod
 import com.example.laykasommelier.data.local.pojo.editstates.MakingMethodEditState
 import com.example.laykasommelier.data.local.repositories.MakingMethodRepository
+import com.example.laykasommelier.network.ApiService
+import com.example.laykasommelier.network.dto.MakingMethodCreateRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MakingMethodViewModel @Inject constructor(
     private val methodRepo: MakingMethodRepository,
+    private val apiService: ApiService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(){
     private val methodId: Long = savedStateHandle["methodId"] ?: -1L
@@ -34,7 +38,7 @@ class MakingMethodViewModel @Inject constructor(
     init {
         if (methodId != -1L) {
             viewModelScope.launch {
-                val method = methodRepo.getById(methodId).first() // получить первый эмит Flow
+                val method = methodRepo.getById(methodId).first()
                 _state.value = MakingMethodEditState(
                     name = method.makingMethodName,
                     dilution = method.makingMethodDilution.toString()
@@ -51,17 +55,35 @@ class MakingMethodViewModel @Inject constructor(
             val st = _state.value
             if (st.name.isBlank()) return@launch
 
-            val method = MakingMethod(
-                makingMethodID = if (methodId == -1L) 0L else methodId,
-                makingMethodName = st.name,
-                makingMethodDilution = st.dilution.toDoubleOrNull() ?: 0.0
+            val request = MakingMethodCreateRequest(
+                name = st.name,
+                dilution = st.dilution.toDoubleOrNull() ?: 0.0
             )
-            if (methodId == -1L) {
-                methodRepo.insert(method)
-            } else {
-                methodRepo.update(method)
+
+            try {
+                if (methodId == -1L) {
+                    val created = apiService.createMakingMethod(request)
+                    methodRepo.insert(
+                        MakingMethod(
+                            makingMethodID = created.id,
+                            makingMethodName = created.name,
+                            makingMethodDilution = created.dilution
+                        )
+                    )
+                } else {
+                    apiService.updateMakingMethod(methodId, request)
+                    methodRepo.update(
+                        MakingMethod(
+                            makingMethodID = methodId,
+                            makingMethodName = st.name,
+                            makingMethodDilution = st.dilution.toDoubleOrNull() ?: 0.0
+                        )
+                    )
+                }
+                _saveSuccess.send(Unit)
+            } catch (e: Exception) {
+                Log.e("MakingMethodEdit", "Server save failed", e)
             }
-            _saveSuccess.send(Unit)
         }
     }
 }

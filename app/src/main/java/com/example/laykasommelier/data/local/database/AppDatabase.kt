@@ -24,7 +24,7 @@ import com.example.laykasommelier.data.local.entities.*
         Source::class,
         Suggestion::class
                ],
-    version = 11,
+    version = 12,
     exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {

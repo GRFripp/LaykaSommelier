@@ -60,12 +60,12 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
+    implementation(libs.google.firebase.messaging.ktx)
     ksp(libs.androidx.room.compiler)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
-   // implementation(libs.firebase.firestore.ktx)
-    //implementation(libs.firebase.storage.ktx)
+    implementation(libs.google.firebase.messaging.ktx)
 
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
@@ -96,4 +96,11 @@ dependencies {
     implementation(libs.gson)
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
+
+    // Apache POI
+    implementation("fr.opensagres.xdocreport:org.apache.poi.ooxml:5.2.5")
+    implementation("fr.opensagres.xdocreport:org.apache.poi:5.2.5")
+
+    // DocxKtm (для упрощённого DSL)
+    implementation("com.github.alexmaryin:docxktm:0.3.0")
 }

@@ -28,7 +28,7 @@ class CocktailRepository(val cocktailDao: CocktailDao,val ingredientDao: Ingredi
                     CocktailListPreviews(
                         cId,
                         first.cName,
-                        imageUrl = null,
+                        imageUrl = first.cImageUrl,
                         descriptors = cRows
                             .filter { it.dName != null && it.dColor != null }
                             .map{ CocktailDescriptors(it.dName!!,it.dColor!!) }

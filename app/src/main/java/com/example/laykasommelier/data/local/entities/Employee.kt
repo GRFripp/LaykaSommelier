@@ -12,8 +12,10 @@ data class Employee(
     val employeeID : Long = 0,
     @ColumnInfo("employeeName")
     val employeeName: String,
+    @ColumnInfo("employeeEmail")
+    val employeeEmail:  String = "123@gmail.com",
     @ColumnInfo("employeePassword")
-    val employeePassword: String = "1234",
+    val employeePassword: String = "123456",
     @ColumnInfo("employeePosition")
     val employeePosition: String
 )

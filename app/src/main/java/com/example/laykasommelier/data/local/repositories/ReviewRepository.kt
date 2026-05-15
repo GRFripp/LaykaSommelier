@@ -18,7 +18,10 @@ class ReviewRepository(
 
     suspend fun updateReview(review: Review) = reviewDao.updateReview(review)
 
-    suspend fun deleteReviewById(id: Long) = reviewDao.getReviewById(id)
+    suspend fun deleteReviewById(id: Long) {
+        val review = reviewDao.getReviewById(id) ?: return
+        reviewDao.deleteReview(review)
+    }
 
     suspend fun getReviewById(id: Long): Review =
         reviewDao.getReviewById(id) ?: throw Exception("Рецензия не найдена")

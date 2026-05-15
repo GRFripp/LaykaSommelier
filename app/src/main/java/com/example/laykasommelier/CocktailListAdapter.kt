@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.laykasommelier.data.local.pojo.CocktailListPreviews
 import com.example.laykasommelier.data.local.pojo.DrinkListPreviews
 import com.google.android.flexbox.FlexboxLayout
@@ -46,6 +47,19 @@ class CocktailListAdapter(private val onItemClick: (Long)-> Unit)
 
         fun bind(item: CocktailListPreviews, onItemClick: (Long) -> Unit){
             nameTv.text = item.cocktailName
+            val imageUrl = item.imageUrl
+            if (!imageUrl.isNullOrEmpty()) {
+                val fullUrl = "http://10.0.2.2:5169" +
+                        (if (imageUrl.startsWith("/")) imageUrl else "/$imageUrl")
+                Glide.with(itemView.context)
+                    .load(fullUrl)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_background)
+                    .centerCrop()
+                    .into(imageIv)
+            } else {
+                imageIv.setImageResource(R.drawable.ic_launcher_background)
+            }
             descriptorsFl.removeAllViews()
             item.descriptors.forEach { descriptors ->
                 val chip = Chip(

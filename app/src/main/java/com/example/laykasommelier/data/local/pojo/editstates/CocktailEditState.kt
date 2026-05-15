@@ -10,5 +10,6 @@ data class CocktailEditState(
     val makingMethodId: Long = -1L,
     val description: String = "",
     val author: String = "",
-    val serving: String = ""
+    val serving: String = "",
+    val imageUrl: String = ""
 )

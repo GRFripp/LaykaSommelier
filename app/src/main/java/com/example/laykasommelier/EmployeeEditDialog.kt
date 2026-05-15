@@ -38,6 +38,8 @@ class EmployeeEditDialog: DialogFragment() {
         val etPassword = view.findViewById<EditText>(R.id.etPassword)
         val btnCancel = view.findViewById<Button>(R.id.btnCancel)
         val btnSave = view.findViewById<Button>(R.id.btnSave)
+        val etEmail = view.findViewById<EditText>(R.id.etEmail)
+        etEmail.doAfterTextChanged { viewModel.onEmailChanged(it.toString()) }
 
         // Настроим Spinner
         val roles = arrayOf("assistant", "bartender", "manager")
@@ -53,12 +55,18 @@ class EmployeeEditDialog: DialogFragment() {
                     etName.setText(state.name)
                     etName.setSelection(minOf(selection, state.name.length))
                 }
-                // Аналогично для etAcidity, etSugar и других полей
+
+                if (etEmail.text.toString() != state.email) {
+                    val pos = etEmail.selectionStart
+                    etEmail.setText(state.email)
+                    etEmail.setSelection(minOf(pos, state.email.length))
+                }
             }
         }
-
-        // Слушатели изменений
         etName.doAfterTextChanged { viewModel.onNameChanged(it.toString()) }
+        etEmail.doAfterTextChanged { viewModel.onEmailChanged(it.toString()) }
+        etPassword.doAfterTextChanged { viewModel.onPasswordChanged(it.toString())
+
         spinnerRole.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 viewModel.onRoleChanged(roles[position])
@@ -76,6 +84,7 @@ class EmployeeEditDialog: DialogFragment() {
             viewModel.saveSuccess.collect {
                 dismiss()
             }
+        }
         }
     }
 

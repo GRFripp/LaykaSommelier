@@ -7,12 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.DescriptorCategory
 import com.example.laykasommelier.data.local.entities.Review
 import com.example.laykasommelier.data.local.entities.Source
+import com.example.laykasommelier.data.local.mapper.toEntity
 import com.example.laykasommelier.data.local.pojo.DescriptorWithCategory
 import com.example.laykasommelier.data.local.pojo.editstates.ReviewEditState
 import com.example.laykasommelier.data.local.repositories.DescriptorCategoryRepository
 import com.example.laykasommelier.data.local.repositories.DescriptorRepository
 import com.example.laykasommelier.data.local.repositories.ReviewRepository
 import com.example.laykasommelier.data.local.repositories.SourceRepository
+import com.example.laykasommelier.network.ApiService
+import com.example.laykasommelier.network.dto.DescriptorReviewLinkRequest
+import com.example.laykasommelier.network.dto.ReviewCreateRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +38,7 @@ class ReviewEditViewModel @Inject constructor(
     private val sourceRepo: SourceRepository,
     private val descriptorRepo: DescriptorRepository,
     private val categoryRepo: DescriptorCategoryRepository,
+    private val apiService: ApiService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val drinkId: Long = savedStateHandle["drinkId"]!!
@@ -48,7 +53,7 @@ class ReviewEditViewModel @Inject constructor(
     private val _categories = MutableStateFlow<List<DescriptorCategory>>(emptyList())
     val categories: StateFlow<List<DescriptorCategory>> = _categories.asStateFlow()
 
-
+    private var initialDescriptorIds: Set<Long> = emptySet()
     val descriptorsWithCategories: StateFlow<List<DescriptorWithCategory>> = combine(
         descriptorRepo.getAllDescriptorsWithCategories(),
         _state.map { it.searchQuery },
@@ -74,6 +79,7 @@ class ReviewEditViewModel @Inject constructor(
             viewModelScope.launch {
                 val review = reviewRepo.getReviewById(reviewId)
                 val descriptorIds = reviewRepo.getDescriptorIdsByReviewId(reviewId)
+                initialDescriptorIds = descriptorIds
                 _state.value = ReviewEditState(
                     sourceId = review.reviewSourceID,
                     url = review.reviewUrl ?: "",
@@ -107,28 +113,71 @@ class ReviewEditViewModel @Inject constructor(
             val st = _state.value
             if (st.sourceId == -1L) return@launch
 
-            val review = Review(
-                reviewID = if (reviewId == -1L) 0L else reviewId,
-                reviewedDrinkID = drinkId,
-                reviewSourceID = st.sourceId,
-                reviewUrl = st.url.ifBlank { null }
+            val reviewRequest = ReviewCreateRequest(
+                reviewedDrinkId = drinkId,
+                sourceId = st.sourceId,
+                url = st.url.ifBlank { null }
             )
-            val resultId = if (reviewId == -1L) {
-                reviewRepo.insertReview(review)
-            } else {
-                reviewRepo.updateReview(review)
-                reviewId
+
+            try {
+                val currentId: Long
+                if (reviewId == -1L) {
+                    // Создание новой рецензии
+                    val response = apiService.createReview(reviewRequest)
+                    currentId = response.id
+                    reviewRepo.insertReview(response.toEntity())
+                    // Дескрипторы: все выбранные – новые
+                    st.selectedDescriptorIds.forEach { descId ->
+                        apiService.addDescriptorReview(DescriptorReviewLinkRequest(descId, currentId))
+                    }
+                    reviewRepo.updateReviewDescriptors(currentId, st.selectedDescriptorIds.toList())
+                } else {
+                    // Обновление существующей
+                    apiService.updateReview(reviewId, reviewRequest)
+                    val updatedReview = Review(
+                        reviewID = reviewId,
+                        reviewedDrinkID = drinkId,
+                        reviewSourceID = st.sourceId,
+                        reviewUrl = st.url.ifBlank { null }
+                    )
+                    reviewRepo.updateReview(updatedReview)
+
+                    // Синхронизация дескрипторов
+                    val selected = st.selectedDescriptorIds
+                    val added = selected - initialDescriptorIds
+                    val removed = initialDescriptorIds - selected
+
+                    added.forEach { descId ->
+                        apiService.addDescriptorReview(
+                            DescriptorReviewLinkRequest(
+                                descId,
+                                reviewId
+                            )
+                        )
+                    }
+                    removed.forEach { descId ->
+                        apiService.removeDescriptorReview(descId, reviewId)
+                    }
+                    reviewRepo.updateReviewDescriptors(reviewId, selected.toList())
+                    initialDescriptorIds = selected
+                    currentId = reviewId
+                }
+                _saveSuccess.send(Unit)
+            } catch (e: Exception) {
+                Log.e("ReviewEditVM", "Ошибка сохранения рецензии", e)
             }
-            Log.d("ReviewEditVM", "Saving review: resultId=$resultId, descriptorIds=${st.selectedDescriptorIds}")
-            reviewRepo.updateReviewDescriptors(resultId, st.selectedDescriptorIds.toList())
-            _saveSuccess.send(Unit)
         }
     }
 
     fun deleteReview() {
         viewModelScope.launch {
-            reviewRepo.deleteReviewById(reviewId)
-            _saveSuccess.send(Unit)
+            try {
+                apiService.deleteReview(reviewId)
+                reviewRepo.deleteReviewById(reviewId) // исправьте метод в ReviewRepository (см. следующий пункт)
+                _saveSuccess.send(Unit)
+            } catch (e: Exception) {
+                Log.e("ReviewEditVM", "Ошибка удаления рецензии", e)
+            }
         }
     }
 }

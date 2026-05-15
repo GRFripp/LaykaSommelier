@@ -1,5 +1,6 @@
 package com.example.laykasommelier.viewModels
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,8 @@ import com.example.laykasommelier.data.local.entities.DescriptorCategory
 import com.example.laykasommelier.data.local.pojo.editstates.DescriptorEditState
 import com.example.laykasommelier.data.local.repositories.DescriptorCategoryRepository
 import com.example.laykasommelier.data.local.repositories.DescriptorRepository
+import com.example.laykasommelier.network.ApiService
+import com.example.laykasommelier.network.dto.DescriptorCreateRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +26,7 @@ import javax.inject.Inject
 class DescriptorEditViewModel @Inject constructor(
     private val descriptorRepo: DescriptorRepository,
     private val categoryRepo: DescriptorCategoryRepository,
+    private val apiService: ApiService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val descriptorId: Long = savedStateHandle["descriptorId"] ?: -1L
@@ -60,17 +64,35 @@ class DescriptorEditViewModel @Inject constructor(
             val st = _state.value
             if (st.name.isBlank() || st.categoryId == -1L) return@launch
 
-            val descriptor = Descriptor(
-                descriptorID = if (descriptorId == -1L) 0L else descriptorId,
-                descriptorName = st.name,
-                descriptorCategory = st.categoryId
+            val request = DescriptorCreateRequest(
+                name = st.name,
+                categoryId = st.categoryId
             )
-            if (descriptorId == -1L) {
-                descriptorRepo.insert(descriptor)
-            } else {
-                descriptorRepo.update(descriptor)
+
+            try {
+                if (descriptorId == -1L) {
+                    val created = apiService.createDescriptor(request)
+                    descriptorRepo.insert(
+                        Descriptor(
+                            descriptorID = created.id,
+                            descriptorName = created.name,
+                            descriptorCategory = created.categoryId
+                        )
+                    )
+                } else {
+                    apiService.updateDescriptor(descriptorId, request)
+                    descriptorRepo.update(
+                        Descriptor(
+                            descriptorID = descriptorId,
+                            descriptorName = st.name,
+                            descriptorCategory = st.categoryId
+                        )
+                    )
+                }
+                _saveSuccess.send(Unit)
+            } catch (e: Exception) {
+                Log.e("DescriptorEdit", "Server save failed", e)
             }
-            _saveSuccess.send(Unit)
         }
     }
 }

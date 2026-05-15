@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_suggestion"
+    app:startDestination="@id/suggestionListFragment">
+
+    <fragment
+        android:id="@+id/suggestionListFragment"
+        android:name="com.example.laykasommelier.SuggestionListFragment"
+        android:label="SuggestionListFragment">
+        <action
+            android:id="@+id/action_suggestionListFragment_to_suggestionEditFragment2"
+            app:destination="@id/suggestionEditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/suggestionEditFragment"
+        android:name="com.example.laykasommelier.SuggestionEditFragment"
+        android:label="Редактирование предложения">
+        <argument android:name="suggestionId" app:argType="long" />
+    </fragment>
+</navigation>

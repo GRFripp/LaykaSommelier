@@ -1,11 +1,14 @@
 package com.example.laykasommelier.viewModels
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.DescriptorCategory
 import com.example.laykasommelier.data.local.pojo.editstates.DescriptorCategoryEditState
 import com.example.laykasommelier.data.local.repositories.DescriptorCategoryRepository
+import com.example.laykasommelier.network.ApiService
+import com.example.laykasommelier.network.dto.DescriptorCategoryCreateRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -16,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DescriptorCategoryEditViewModel @Inject constructor(
     private val categoryRepo: DescriptorCategoryRepository,
+    private val apiService: ApiService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val categoryId: Long = savedStateHandle["categoryId"] ?: -1L
@@ -46,17 +50,35 @@ class DescriptorCategoryEditViewModel @Inject constructor(
             val st = _state.value
             if (st.name.isBlank()) return@launch
 
-            val category = DescriptorCategory(
-                descriptorCategoryID = if (categoryId == -1L) 0L else categoryId,
-                descriptorCategoryName = st.name,
-                descriptorCategoryColor = st.color
+            val request = DescriptorCategoryCreateRequest(
+                name = st.name,
+                color = st.color
             )
-            if (categoryId == -1L) {
-                categoryRepo.insert(category)
-            } else {
-                categoryRepo.update(category)
+
+            try {
+                if (categoryId == -1L) {
+                    val created = apiService.createDescriptorCategory(request)
+                    categoryRepo.insert(
+                        DescriptorCategory(
+                            descriptorCategoryID = created.id,
+                            descriptorCategoryName = created.name,
+                            descriptorCategoryColor = created.color
+                        )
+                    )
+                } else {
+                    apiService.updateDescriptorCategory(categoryId, request)
+                    categoryRepo.update(
+                        DescriptorCategory(
+                            descriptorCategoryID = categoryId,
+                            descriptorCategoryName = st.name,
+                            descriptorCategoryColor = st.color
+                        )
+                    )
+                }
+                _saveSuccess.send(Unit)
+            } catch (e: Exception) {
+                Log.e("DescriptorCategoryEdit", "Server save failed", e)
             }
-            _saveSuccess.send(Unit)
         }
     }
 }

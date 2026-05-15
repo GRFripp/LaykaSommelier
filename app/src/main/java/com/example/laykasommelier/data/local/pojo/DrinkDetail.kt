@@ -9,11 +9,11 @@ data class DrinkDetail(
 
     val type: String,
 
-    val subType : String,
+    val subType : String?,
 
-    val country: String,
+    val country: String?,
 
-    val producer: String,
+    val producer: String?,
 
     val aged: Int,
 

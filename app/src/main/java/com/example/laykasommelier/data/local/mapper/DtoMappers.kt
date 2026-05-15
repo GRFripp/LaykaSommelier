@@ -28,6 +28,21 @@ fun CocktailDto.toEntity() = Cocktail(
     cocktailImageUrl = imageUrl
 )
 
+fun CocktailCreateRequest.toEntity(id: Long) = Cocktail(
+    cocktailID = id,
+    cocktailName = name,
+    cocktailVolume = volume,
+    cocktailAcidity = acidity,
+    cocktailSugarLevel = sugarLevel,
+    cocktailAbv = abv,
+    cocktailGlass = glass,
+    cocktailMakingMethodID = makingMethodId,
+    cocktailDescription = description,
+    cocktailAuthor = author,
+    cocktailServing = serving,
+    cocktailImageUrl = imageUrl
+)
+
 fun IngredientDto.toEntity() = Ingredient(
     ingredientID = id,
     ingredientName = name,
@@ -87,6 +102,7 @@ fun DescriptorReviewDto.toEntity() = DescriptorReview(
 fun EmployeeDto.toEntity() = Employee(
     employeeID = id,
     employeeName = name,
+    employeeEmail = email,
     employeePassword = password,
     employeePosition = position
 )

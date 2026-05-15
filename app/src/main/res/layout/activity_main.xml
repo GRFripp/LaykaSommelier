@@ -54,7 +54,17 @@
                         app:layout_constraintEnd_toStartOf="@id/envelopeButton"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent" />
-
+                    <ImageButton
+                        android:id="@+id/logoutButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/outline_close_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Выход"
+                        android:padding="12dp"
+                        app:layout_constraintEnd_toStartOf="@id/envelopeButton"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
                     <ImageButton
                         android:id="@+id/envelopeButton"
                         android:layout_width="wrap_content"
@@ -119,5 +129,4 @@
             android:textAllCaps="false"
             android:textSize="14sp" />
     </LinearLayout>
-
 </FrameLayout>

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,11 +23,23 @@ import com.example.laykasommelier.viewModels.CocktailEditViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import android.net.Uri
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.example.laykasommelier.data.local.pojo.EmployeeRole
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CocktailEditFragment : Fragment(){
     private val viewModel: CocktailEditViewModel by viewModels()
     private lateinit var ingredientLinkAdapter: CocktailIngredientLinkAdapter
+    @Inject
+    lateinit var sessionManager: SessionManager
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { viewModel.onImageSelected(it) }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_cocktail_edit, container, false)
@@ -49,7 +62,17 @@ class CocktailEditFragment : Fragment(){
         val rvIngredients = view.findViewById<RecyclerView>(R.id.rvIngredients)
         val btnAddIngredient = view.findViewById<Button>(R.id.btnAddIngredient)
         val btnSave = view.findViewById<Button>(R.id.btnSave)
+        val ivCocktailImage = view.findViewById<ImageView>(R.id.ivCocktailImage)
+        val btnLoadCocktailImage = view.findViewById<Button>(R.id.btnLoadCocktailImage)
 
+
+        val role = sessionManager.getRole()
+        if (role != EmployeeRole.MANAGER) {
+            btnAddIngredient.visibility = View.GONE
+        }
+        btnLoadCocktailImage.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
         // Спиннер для метода
         val methodList = mutableListOf<MakingMethod>()
         val methodAdapter = ArrayAdapter<String>(
@@ -85,6 +108,7 @@ class CocktailEditFragment : Fragment(){
         // Заполнение полей из state
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state.collect { state ->
+                // Обновление текстовых полей (уже было)
                 setEditText(etName, state.name)
                 setEditText(etVolume, state.volume)
                 setEditText(etAcidity, state.acidity)
@@ -94,13 +118,40 @@ class CocktailEditFragment : Fragment(){
                 setEditText(etDescription, state.description)
                 setEditText(etAuthor, state.author)
                 setEditText(etServing, state.serving)
+
                 if (state.makingMethodId != -1L) {
                     val idx = methodList.indexOfFirst { it.makingMethodID == state.makingMethodId }
-                    if (idx >= 0 && spinnerMethod.selectedItemPosition != idx) spinnerMethod.setSelection(idx)
+                    if (idx >= 0 && spinnerMethod.selectedItemPosition != idx)
+                        spinnerMethod.setSelection(idx)
+                }
+
+                // ---- ЗАГРУЗКА ИЗОБРАЖЕНИЯ (добавлено) ----
+                val imageUrl = state.imageUrl
+                if (!imageUrl.isNullOrEmpty()) {
+                    val fullUrl = "http://10.0.2.2:5169" +
+                            (if (imageUrl.startsWith("/")) imageUrl else "/$imageUrl")
+                    Glide.with(this@CocktailEditFragment)
+                        .load(fullUrl)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
+                        .centerCrop()
+                        .into(ivCocktailImage)
+                } else {
+                    ivCocktailImage.setImageResource(R.drawable.ic_launcher_background)
                 }
             }
         }
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.selectedImageUri.collect { uri ->
+                if (uri != null) {
+                    Glide.with(this@CocktailEditFragment)
+                        .load(uri)
+                        .centerCrop()
+                        .into(ivCocktailImage)
+                }
+                // Если uri == null, ничего не делаем — картинка уже отображается из state
+            }
+        }
         // Слушатели ввода
         etName.doAfterTextChanged { viewModel.onNameChanged(it) }
         etVolume.doAfterTextChanged { viewModel.onVolumeChanged(it) }

@@ -18,7 +18,7 @@ interface EmployeeDao {
     suspend fun deleteDrink(employee: Employee)
 
     @Query("""
-        Select employeeID as id, employeeName as name, employeePosition as position
+        Select employeeID as id, employeeName as name, employeeEmail as email
         From Employees
     """)
     fun getALEmployees(): Flow<List<AdminListItem.ALEmployee>>

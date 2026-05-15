@@ -27,7 +27,7 @@ class AdminViewModel @Inject constructor(private val adminRepo: AdminRepository)
                 list.map{ AdminListItem.ALDescriptorCategory(it.id,it.name,it.color) }
             }
             AdminEntityType.EMPLOYEES -> adminRepo.getEmployeesAdmin().map{ list ->
-                list.map{ AdminListItem.ALEmployee(it.id,it.name,it.position) }
+                list.map{ AdminListItem.ALEmployee(it.id,it.name,it.email) }
             }
             AdminEntityType.INGREDIENTS -> adminRepo.getIngredientAdmin().map{list ->
                 list.map{ AdminListItem.ALIngredient(it.id,it.name,it.abv) }

@@ -1,11 +1,14 @@
 package com.example.laykasommelier.viewModels
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.laykasommelier.data.local.entities.Employee
 import com.example.laykasommelier.data.local.pojo.editstates.EmployeeEditState
 import com.example.laykasommelier.data.local.repositories.EmployeeRepository
+import com.example.laykasommelier.network.ApiService
+import com.example.laykasommelier.network.dto.EmployeeCreateRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EmployeeEditViewModel @Inject constructor(
     private val employeeRepo: EmployeeRepository,
+    private val apiService: ApiService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val employeeId: Long = savedStateHandle["employeeId"] ?: -1L
@@ -37,8 +41,9 @@ class EmployeeEditViewModel @Inject constructor(
                 val emp = employeeRepo.getEmployeeById(employeeId)
                 _state.value = EmployeeEditState(
                     name = emp.employeeName,
+                    email = emp.employeeEmail,
                     role = emp.employeePosition,
-                    password = "" // пароль не храним в открытом виде, оставляем пустым
+                    password = emp.employeePassword   // пароль не заполняем при редактировании
                 )
             }
         }
@@ -47,26 +52,46 @@ class EmployeeEditViewModel @Inject constructor(
     fun onNameChanged(name: String) { _state.update { it.copy(name = name) } }
     fun onRoleChanged(role: String) { _state.update { it.copy(role = role) } }
     fun onPasswordChanged(password: String) { _state.update { it.copy(password = password) } }
-
+    fun onEmailChanged(email: String) { _state.update { it.copy(email = email) } }
     fun save() {
         viewModelScope.launch {
             val st = _state.value
-            if (st.name.isBlank()) {
-                // можно передать ошибку через отдельный StateFlow
-                return@launch
-            }
-            val employee = Employee(
-                employeeID = if (employeeId == -1L) 0L else employeeId,
-                employeeName = st.name,
-                employeePassword = st.password, // здесь нужно хэширование, пока для простоты так
-                employeePosition = st.role
+            if (st.name.isBlank()) return@launch
+
+            val request = EmployeeCreateRequest(
+                name = st.name,
+                email = st.email.ifBlank { "123@gmail.com" },
+                password = st.password.ifBlank { "1234" },
+                position = st.role
             )
-            if (employeeId == -1L) {
-                employeeRepo.insertEmployee(employee)
-            } else {
-                employeeRepo.updateEmployee(employee)
+
+            try {
+                if (employeeId == -1L) {
+                    val created = apiService.createEmployee(request)
+                    // Сохраняем локально с присвоенным ID
+                    employeeRepo.insertEmployee(
+                        Employee(
+                            employeeID = created.id,
+                            employeeName = created.name,
+                            employeePassword = st.password.ifBlank { "1234" },
+                            employeePosition = created.position
+                        )
+                    )
+                } else {
+                    apiService.updateEmployee(employeeId, request)
+                    employeeRepo.updateEmployee(
+                        Employee(
+                            employeeID = employeeId,
+                            employeeName = st.name,
+                            employeePassword = st.password.ifBlank { "1234" },
+                            employeePosition = st.role
+                        )
+                    )
+                }
+                _saveSuccess.send(Unit)
+            } catch (e: Exception) {
+                Log.e("EmployeeEdit", "Server save failed", e)
             }
-            _saveSuccess.send(Unit)
         }
     }
 }

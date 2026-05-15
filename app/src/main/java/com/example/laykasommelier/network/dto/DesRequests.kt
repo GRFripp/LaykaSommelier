@@ -5,20 +5,13 @@ data class DescriptorCategoryCreateRequest(
     val color: String
 )
 
-data class DescriptorCategoryUpdateRequest(
-    val name: String,
-    val color: String
-)
 
 data class DescriptorCreateRequest(
     val name: String,
     val categoryId: Long
 )
 
-data class DescriptorUpdateRequest(
-    val name: String,
-    val categoryId: Long
-)
+
 
 data class IngredientDescriptorLinkRequest(
     val ingredientId: Long,
@@ -45,6 +38,7 @@ data class DescriptorReviewLinkRequest(
 // EmployeeCreateRequest
 data class EmployeeCreateRequest(
     val name: String,
+    val email: String,
     val password: String,
     val position: String
 )
@@ -55,3 +49,5 @@ data class SuggestionCreateRequest(
     val employeeId: Long,
     val status: String
 )
+data class SuggestionStatusUpdateRequest(val status: String)
+

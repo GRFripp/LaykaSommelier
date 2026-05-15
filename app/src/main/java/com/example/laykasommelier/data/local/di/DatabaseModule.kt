@@ -13,6 +13,7 @@ import com.example.laykasommelier.data.local.repositories.IngredientRepository
 import com.example.laykasommelier.data.local.repositories.MakingMethodRepository
 import com.example.laykasommelier.data.local.repositories.ReviewRepository
 import com.example.laykasommelier.data.local.repositories.SourceRepository
+import com.example.laykasommelier.data.local.repositories.SuggestionRepository
 import com.example.laykasommelier.data.local.repositories.SyncRepository
 import com.example.laykasommelier.network.ApiService
 import dagger.Module
@@ -108,4 +109,8 @@ class DatabaseModule {
     @Singleton
     fun provideSourceRepo(sourceDao: SourceDao): SourceRepository=
         SourceRepository(sourceDao)
+    @Provides
+    @Singleton
+    fun provideSuggestionRepo(suggestionDao: SuggestionDao): SuggestionRepository =
+        SuggestionRepository(suggestionDao)
 }

@@ -1,4 +1,6 @@
 package com.example.laykasommelier.network.dto
 
-class MakingMethodCreateRequest {
-}
+data class MakingMethodCreateRequest (
+    val name: String,
+    val dilution: Double
+)
